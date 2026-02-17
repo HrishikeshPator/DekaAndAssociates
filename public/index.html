@@ -1,16 +1,20 @@
 <!DOCTYPE html>
-<html class="dark" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>DEKA & ASSOCIATES | Tech-Forward Advisory</title>
+<html class="dark" lang="en">
 
-<link rel="icon" type="image/webp" href="logo.webp">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>DEKA & ASSOCIATES | Tech-Forward Advisory</title>
 
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
+    <link rel="icon" type="image/webp" href="logo.webp">
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
@@ -35,42 +39,54 @@
             },
         }
     </script>
-<style>
+    <style>
         .glass {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
         .glass-card {
             background: rgba(13, 51, 242, 0.05);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(13, 51, 242, 0.2);
             transition: all 0.3s ease;
         }
+
         .glass-card:hover {
             transform: translateY(-5px);
             background: rgba(13, 51, 242, 0.1);
             border-color: rgba(13, 51, 242, 0.4);
         }
+
         .glow-effect {
             box-shadow: 0 0 20px rgba(13, 51, 242, 0.3);
         }
+
         .bg-gradient-mesh {
             background-color: #101322;
-            background-image: 
+            background-image:
                 radial-gradient(at 0% 0%, rgba(13, 51, 242, 0.15) 0px, transparent 50%),
                 radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
         }
+
         @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
         }
+
         .animate-marquee {
             display: flex;
             width: 200%;
             animation: marquee 30s linear infinite;
         }
+
         .whatsapp-float {
             position: fixed;
             bottom: 30px;
@@ -78,288 +94,975 @@
             z-index: 100;
             transition: transform 0.3s ease;
         }
+
         .whatsapp-float:hover {
             transform: scale(1.1);
         }
     </style>
+    <script>
+        function toggleService(id, btn) {
+            const content = document.getElementById(id);
+            const isHidden = content.classList.contains('hidden');
+
+            if (isHidden) {
+                content.classList.remove('hidden');
+                btn.innerHTML = 'See Less <span class="material-icons text-sm">expand_less</span>';
+            } else {
+                content.classList.add('hidden');
+                btn.innerHTML = 'See More <span class="material-icons text-sm">expand_more</span>';
+            }
+        }
+    </script>
 </head>
-<body class="bg-background-light dark:bg-background-dark font-display text-slate-800 dark:text-slate-100 overflow-x-hidden">
 
-<a href="https://wa.me/919365828122?text=Hello%20Deka%20%26%20Associates%2C%20I%20would%20like%20to%20book%20a%20consultation." class="whatsapp-float bg-whatsapp text-white p-4 rounded-full shadow-2xl flex items-center justify-center glow-effect" target="_blank">
-    <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 0 5.414 0 12.05c0 2.123.552 4.197 1.602 6.02L0 24l6.149-1.613a11.785 11.785 0 005.895 1.564h.005c6.635 0 12.05-5.414 12.05-12.05a11.761 11.761 0 00-3.528-8.52z"/>
-    </svg>
-</a>
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-800 dark:text-slate-100 overflow-x-hidden">
 
-<nav class="fixed top-0 w-full z-50 px-6 py-4">
-<div class="max-w-7xl mx-auto flex items-center justify-between glass rounded-xl px-6 py-3">
-<div class="flex items-center space-x-3">
-<img src="logo.webp" alt="DEKA & ASSOCIATES Logo" class="w-10 h-10 object-contain rounded">
-<span class="text-xl font-bold tracking-tight uppercase">DEKA <span class="text-primary">&</span> ASSOCIATES</span>
-</div>
-<div class="hidden md:flex space-x-8 text-sm font-medium tracking-wide">
-<a class="hover:text-primary transition-colors" href="#services">Expertise</a>
-<a class="hover:text-primary transition-colors" href="#about">Legacy</a>
-<a class="hover:text-primary transition-colors" href="#contact">Contact</a>
-</div>
-<a href="https://wa.me/919365828122" target="_blank" class="bg-primary text-white px-5 py-2 rounded font-medium text-sm hover:opacity-90 transition-all flex items-center space-x-2">
-<span>Book Consultation</span>
-<span class="material-icons text-xs">event</span>
-</a>
-</div>
-</nav>
+    <a href="https://wa.me/919365828122?text=Hello%20Deka%20%26%20Associates%2C%20I%20would%20like%20to%20book%20a%20consultation."
+        class="whatsapp-float bg-whatsapp text-white p-4 rounded-full shadow-2xl flex items-center justify-center glow-effect"
+        target="_blank">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+            <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 0 5.414 0 12.05c0 2.123.552 4.197 1.602 6.02L0 24l6.149-1.613a11.785 11.785 0 005.895 1.564h.005c6.635 0 12.05-5.414 12.05-12.05a11.761 11.761 0 00-3.528-8.52z" />
+        </svg>
+    </a>
 
-<section class="relative min-h-screen flex items-center pt-20 bg-gradient-mesh">
-<div class="absolute inset-0 z-0 opacity-40">
-<div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[120px]"></div>
-<div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent-purple/20 rounded-full blur-[120px]"></div>
-</div>
-<div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center relative z-10">
-<div class="space-y-8">
-<div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-bold uppercase tracking-widest">
-<span class="relative flex h-2 w-2">
-<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-</span>
-<span>Next-Gen Fiscal Intelligence</span>
-</div>
-<h1 class="text-5xl md:text-7xl font-bold leading-tight">
-                    The Future of <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent-purple">Accounting</span> is Digital.
+    <nav class="fixed top-0 w-full z-50 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between glass rounded-xl px-6 py-3">
+            <div class="flex items-center space-x-3">
+                <img src="logo.webp" alt="DEKA & ASSOCIATES Logo" class="w-10 h-10 object-contain rounded">
+                <span class="text-xl font-bold tracking-tight uppercase">DEKA <span class="text-primary">&</span>
+                    ASSOCIATES</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-8 text-sm font-medium tracking-wide">
+                <a class="hover:text-primary transition-colors" href="#services">Expertise</a>
+                <div class="relative group">
+                    <button class="hover:text-primary transition-colors flex items-center gap-1">
+                        Startups <span class="material-icons text-sm">expand_more</span>
+                    </button>
+                    <div
+                        class="absolute top-full left-0 w-64 bg-[#101322] border border-white/10 rounded-xl shadow-2xl p-2 hidden group-hover:block transition-all opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 text-left">
+                        <a href="#new-entrepreneurs"
+                            class="block px-4 py-3 hover:bg-white/5 rounded-lg text-sm text-slate-300 hover:text-white transition-colors">
+                            For New Entrepreneurs
+                        </a>
+                        <a href="#starting-a-venture"
+                            class="block px-4 py-3 hover:bg-white/5 rounded-lg text-sm text-slate-300 hover:text-white transition-colors">
+                            Planning to Start a Venture?
+                        </a>
+                    </div>
+                </div>
+                <a class="hover:text-primary transition-colors" href="#about">Legacy</a>
+                <a class="hover:text-primary transition-colors" href="#contact">Contact</a>
+            </div>
+            <a href="https://wa.me/919365828122" target="_blank"
+                class="bg-primary text-white px-5 py-2 rounded font-medium text-sm hover:opacity-90 transition-all flex items-center space-x-2">
+                <span>Book Consultation</span>
+                <span class="material-icons text-xs">event</span>
+            </a>
+        </div>
+    </nav>
+
+    <section class="relative min-h-screen flex items-center pt-20 bg-gradient-mesh">
+        <div class="absolute inset-0 z-0 opacity-40">
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[120px]"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent-purple/20 rounded-full blur-[120px]"></div>
+        </div>
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center relative z-10">
+            <div class="space-y-8">
+                <div
+                    class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-bold uppercase tracking-widest">
+                    <span class="relative flex h-2 w-2">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                    </span>
+                    <span>Strategic Financial & Regulatory Advisory</span>
+                </div>
+                <h1 class="text-5xl md:text-7xl font-bold leading-tight">
+                    Business Registration, <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent-purple">Taxation &
+                        Compliance</span> Support
                 </h1>
-<p class="text-lg text-slate-400 max-w-lg leading-relaxed">
-                    DEKA & ASSOCIATES specializes in Income Tax filing, GST compliance, and high-fidelity Financial Modelling to drive strategic business growth.
+                <p class="text-lg text-slate-400 max-w-lg leading-relaxed">
+                    Structured guidance for individuals, startups, NGOs, Companies and NRIs.
                 </p>
-<div class="flex flex-col sm:flex-row gap-4 pt-4">
-<a href="#services" class="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-lg font-bold transition-all glow-effect text-center">
-                        Explore Expertise
+                <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                    <a href="https://wa.me/919365828122" target="_blank"
+                        class="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-lg font-bold transition-all glow-effect text-center">
+                        Book Startup Consultation
                     </a>
-<a href="https://wa.me/919365828122" target="_blank" class="glass px-8 py-4 rounded-lg font-bold border border-white/10 hover:bg-white/5 transition-all text-center">
+                    <a href="https://wa.me/919365828122" target="_blank"
+                        class="glass px-8 py-4 rounded-lg font-bold border border-white/10 hover:bg-white/5 transition-all text-center">
                         Message Us
                     </a>
-</div>
-</div>
-<div class="relative hidden md:block">
-<div class="relative z-10 p-4">
-<img alt="3D Abstract Data Visualization" class="rounded-xl shadow-2xl border border-white/10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYkfqDSdnQkcpPajdBHrfx0eZrSl8obGD17Ypp9kM7mbhXIOvSr0eOhePFjkYN5bW8DHhDAuqK-8Asy71NJgKccI2A5b94xiYNsHkvlzAgW73UpLOXwd-vOn0xGTtsXpbGjqMhHtnChoZig_0uHo3AisZ-qgPOMqCZsIBwJDS-qlipiYu-u5TrJAlCHToXTnOusGLaA2uKV5eztYp01RQiojlAoszc04VWoO3Rt_WojmfVm5q9qBdyw38JoMFdSzCJ4WUf6Wz_1JwC"/>
-<div class="absolute -top-6 -right-6 glass-card p-4 rounded-xl shadow-xl w-48 text-center">
-<p class="text-[10px] uppercase text-slate-400 font-bold mb-1">Real-time Filing</p>
-<p class="text-2xl font-bold text-primary">99.9%</p>
-<p class="text-[10px] text-green-400 font-medium">Compliance Accuracy</p>
-</div>
-<div class="absolute -bottom-10 -left-10 glass-card p-4 rounded-xl shadow-xl w-56">
-<div class="flex items-center space-x-3">
-<div class="p-2 bg-accent-purple/20 rounded">
-<span class="material-icons text-accent-purple text-xl">cloud_done</span>
-</div>
-<div>
-<p class="text-xs font-bold">Cloud Migration</p>
-<p class="text-[10px] text-slate-400">Automated Ledger Sync</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
+                </div>
+            </div>
+            <div class="relative hidden md:block">
+                <div class="relative z-10 p-4">
+                    <img alt="3D Abstract Data Visualization" class="rounded-xl shadow-2xl border border-white/10"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYkfqDSdnQkcpPajdBHrfx0eZrSl8obGD17Ypp9kM7mbhXIOvSr0eOhePFjkYN5bW8DHhDAuqK-8Asy71NJgKccI2A5b94xiYNsHkvlzAgW73UpLOXwd-vOn0xGTtsXpbGjqMhHtnChoZig_0uHo3AisZ-qgPOMqCZsIBwJDS-qlipiYu-u5TrJAlCHToXTnOusGLaA2uKV5eztYp01RQiojlAoszc04VWoO3Rt_WojmfVm5q9qBdyw38JoMFdSzCJ4WUf6Wz_1JwC" />
+                    <div class="absolute -top-6 -right-6 glass-card p-4 rounded-xl shadow-xl w-48 text-center">
+                        <p class="text-[10px] uppercase text-slate-400 font-bold mb-1">Real-time Filing</p>
+                        <p class="text-2xl font-bold text-primary">99.9%</p>
+                        <p class="text-[10px] text-green-400 font-medium">Compliance Accuracy</p>
+                    </div>
+                    <div class="absolute -bottom-10 -left-10 glass-card p-4 rounded-xl shadow-xl w-56">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2 bg-accent-purple/20 rounded">
+                                <span class="material-icons text-accent-purple text-xl">cloud_done</span>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold">Digital Transformation</p>
+                                <p class="text-[10px] text-slate-400">Tech-Enabled Compliance</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<div class="w-full bg-primary/5 border-y border-white/5 py-4 overflow-hidden">
-<div class="flex animate-marquee whitespace-nowrap space-x-12 items-center text-xs font-bold tracking-[0.2em] uppercase text-primary/60">
-<span>• Income Tax Filing</span>
-<span>• GST Registration</span>
-<span>• GSTR Filing</span>
-<span>• TDS & TCS Compliance</span>
-<span>• Audit Services</span>
-<span>• Financial Modelling</span>
-</div>
-</div>
+    <div class="w-full bg-primary/5 border-y border-white/5 py-4 overflow-hidden">
+        <div
+            class="flex animate-marquee whitespace-nowrap space-x-12 items-center text-xs font-bold tracking-[0.2em] uppercase text-primary/60">
+            <span>• Income Tax Filing</span>
+            <span>• GST Registration</span>
+            <span>• GSTR Filing</span>
+            <span>• TDS & TCS Compliance</span>
+            <span>• Audit Services</span>
+            <span>• Financial Modelling</span>
+        </div>
+    </div>
 
-<section id="services" class="py-24 relative overflow-hidden">
-<div class="max-w-7xl mx-auto px-6">
-<div class="text-center mb-20">
-<h2 class="text-3xl md:text-5xl font-bold mb-4">Programmable <span class="text-primary">Advisory</span></h2>
-<p class="text-slate-400 max-w-2xl mx-auto">Providing precise Income Tax, GST, and Audit solutions alongside advanced Financial Modelling for modern enterprises.</p>
-</div>
-<div class="grid md:grid-cols-3 gap-8">
-<div class="glass-card p-8 rounded-xl relative overflow-hidden group">
-<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-<span class="material-icons text-8xl">receipt_long</span>
-</div>
-<div class="w-12 h-12 bg-primary/20 rounded flex items-center justify-center mb-6">
-<span class="material-icons text-primary">account_balance_wallet</span>
-</div>
-<h3 class="text-xl font-bold mb-4">Tax & GST</h3>
-<ul class="space-y-3 text-slate-400 text-sm">
-<li>• Income Tax Filing (ITR)</li>
-<li>• GST Registration & GSTR Filing</li>
-<li>• TDS & TCS Compliance</li>
-</ul>
-</div>
-<div class="glass-card p-8 rounded-xl relative overflow-hidden group">
-<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-<span class="material-icons text-8xl">radar</span>
-</div>
-<div class="w-12 h-12 bg-accent-purple/20 rounded flex items-center justify-center mb-6">
-<span class="material-icons text-accent-purple">analytics</span>
-</div>
-<h3 class="text-xl font-bold mb-4">Audit Services</h3>
-<ul class="space-y-3 text-slate-400 text-sm">
-<li>• Statutory & Internal Audits</li>
-<li>• Automated anomaly detection</li>
-<li>• Compliance Risk Assessment</li>
-</ul>
-</div>
-<div class="glass-card p-8 rounded-xl relative overflow-hidden group">
-<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-<span class="material-icons text-8xl">hub</span>
-</div>
-<div class="w-12 h-12 bg-white/10 rounded flex items-center justify-center mb-6">
-<span class="material-icons text-slate-100">settings_suggest</span>
-</div>
-<h3 class="text-xl font-bold mb-4">Financial Modelling</h3>
-<ul class="space-y-3 text-slate-400 text-sm">
-<li>• Strategic growth roadmap</li>
-<li>• Investor reporting dashboards</li>
-<li>• Cash Flow Sensitivity Analysis</li>
-</ul>
-</div>
-</div>
-</div>
-</section>
+    <section id="who-we-work-with" class="py-24 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold mb-4">Who <span class="text-primary">We Work With</span></h2>
+                <p class="text-slate-400">Tailored financial and regulatory solutions for diverse business needs.</p>
+            </div>
 
-<section id="about" class="py-24 bg-primary/5">
-<div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
-<div class="grid grid-cols-2 gap-4">
-<div class="space-y-4">
-<div class="glass p-6 rounded-xl aspect-square flex flex-col justify-center items-center text-center">
-<span class="material-icons text-primary text-4xl mb-4 opacity-80">history_edu</span>
-<span class="text-3xl font-bold text-primary">7+</span>
-<p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Years Experience</p>
-</div>
-<div class="glass-card p-6 rounded-xl aspect-square flex flex-col justify-center items-center text-center">
-<span class="material-icons text-accent-purple text-4xl mb-4 opacity-80">groups</span>
-<span class="text-3xl font-bold text-accent-purple">100+</span>
-<p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Digital Clients</p>
-</div>
-</div>
-<div class="space-y-4 pt-12">
-<div class="glass-card p-6 rounded-xl aspect-square flex flex-col justify-center items-center text-center">
-<span class="material-icons text-white text-4xl mb-4 opacity-80">cloud_done</span>
-<span class="text-3xl font-bold text-white">100%</span>
-<p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Cloud Adoption</p>
-</div>
-<div class="glass p-6 rounded-xl aspect-square flex flex-col justify-center items-center text-center">
-<span class="material-icons text-primary text-4xl mb-4 opacity-80">support_agent</span>
-<span class="text-3xl font-bold text-primary">24/7</span>
-<p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Expert Access</p>
-</div>
-</div>
-</div>
-<div class="space-y-6">
-<h2 class="text-4xl font-bold leading-tight">Legacy Knowledge, <br/><span class="text-primary">Future Framework.</span></h2>
-<p class="text-slate-400 leading-relaxed">
-                    At DEKA & ASSOCIATES, we apply Indian tax logic in real-time to your financial data.
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <!-- Startups -->
+                <div class="glass-card p-6 rounded-xl text-center group hover:bg-white/5 transition-all">
+                    <div
+                        class="w-12 h-12 mx-auto bg-primary/20 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <span class="material-icons text-primary">rocket_launch</span>
+                    </div>
+                    <h3 class="font-bold text-sm md:text-base">Startups & New Entrepreneurs</h3>
+                </div>
+
+                <!-- SMBs -->
+                <div class="glass-card p-6 rounded-xl text-center group hover:bg-white/5 transition-all">
+                    <div
+                        class="w-12 h-12 mx-auto bg-accent-purple/20 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <span class="material-icons text-accent-purple">store</span>
+                    </div>
+                    <h3 class="font-bold text-sm md:text-base">Small & Medium Businesses</h3>
+                </div>
+
+                <!-- Individuals -->
+                <div class="glass-card p-6 rounded-xl text-center group hover:bg-white/5 transition-all">
+                    <div
+                        class="w-12 h-12 mx-auto bg-white/10 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <span class="material-icons text-slate-100">person</span>
+                    </div>
+                    <h3 class="font-bold text-sm md:text-base">Individuals (ITR Filing)</h3>
+                </div>
+
+                <!-- NGOs -->
+                <div class="glass-card p-6 rounded-xl text-center group hover:bg-white/5 transition-all">
+                    <div
+                        class="w-12 h-12 mx-auto bg-green-500/20 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <span class="material-icons text-green-400">volunteer_activism</span>
+                    </div>
+                    <h3 class="font-bold text-sm md:text-base">NGOs & Societies</h3>
+                </div>
+
+                <!-- Companies & LLPs -->
+                <div class="glass-card p-6 rounded-xl text-center group hover:bg-white/5 transition-all">
+                    <div
+                        class="w-12 h-12 mx-auto bg-yellow-500/20 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <span class="material-icons text-yellow-400">business</span>
+                    </div>
+                    <h3 class="font-bold text-sm md:text-base">Companies & LLPs</h3>
+                </div>
+
+                <!-- NRIs -->
+                <div class="glass-card p-6 rounded-xl text-center group hover:bg-white/5 transition-all">
+                    <div
+                        class="w-12 h-12 mx-auto bg-cyan-500/20 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <span class="material-icons text-cyan-400">flight</span>
+                    </div>
+                    <h3 class="font-bold text-sm md:text-base">NRIs with Indian Income</h3>
+                </div>
+
+                <!-- Ongoing Compliance -->
+                <div class="glass-card p-6 rounded-xl text-center group hover:bg-white/5 transition-all md:col-span-2">
+                    <div
+                        class="w-12 h-12 mx-auto bg-pink-500/20 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <span class="material-icons text-pink-400">sync</span>
+                    </div>
+                    <h3 class="font-bold text-sm md:text-base">Businesses requiring ongoing compliance</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- For New Entrepreneurs Section -->
+    <section id="new-entrepreneurs" class="py-24 relative overflow-hidden bg-primary/5">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+            <!-- Left Column: Image/Vector -->
+            <div class="relative order-2 md:order-1">
+                <div
+                    class="absolute inset-0 bg-gradient-to-tr from-primary/20 to-accent-purple/20 rounded-full blur-[100px] opacity-60">
+                </div>
+                <img src="new_entre.jpg" alt="Startup Planning"
+                    class="relative z-10 w-full max-w-md mx-auto rounded-2xl shadow-2xl border border-white/10 hover:scale-105 transition-transform duration-500">
+            </div>
+
+            <!-- Right Column: Content -->
+            <div class="space-y-8 order-1 md:order-2">
+                <div>
+                    <div
+                        class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-accent-purple/10 border border-accent-purple/30 text-accent-purple text-xs font-bold uppercase tracking-widest mb-4">
+                        <span class="material-icons text-sm">rocket_launch</span>
+                        <span>Launchpad</span>
+                    </div>
+                    <h2 class="text-3xl md:text-5xl font-bold leading-tight">For <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent-purple">New
+                            Entrepreneurs</span></h2>
+                </div>
+
+                <p class="text-lg text-slate-300">If you are planning to start a business and are unsure about:</p>
+
+                <div class="space-y-4">
+                    <div
+                        class="flex items-start space-x-4 group p-4 rounded-xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/5">
+                        <div
+                            class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-white transition-colors">
+                            <span
+                                class="material-icons text-primary group-hover:text-white transition-colors">domain</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-200">Which structure to choose</h4>
+                            <p class="text-sm text-slate-400">Proprietorship, LLP, or Pvt Ltd tailored to your vision.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div
+                        class="flex items-start space-x-4 group p-4 rounded-xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/5">
+                        <div
+                            class="w-10 h-10 rounded-full bg-accent-purple/20 flex items-center justify-center shrink-0 group-hover:bg-accent-purple group-hover:text-white transition-colors">
+                            <span
+                                class="material-icons text-accent-purple group-hover:text-white transition-colors">receipt_long</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-200">Whether GST is required</h4>
+                            <p class="text-sm text-slate-400">Analysis of turnover limits and interstate supply rules.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div
+                        class="flex items-start space-x-4 group p-4 rounded-xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/5">
+                        <div
+                            class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center shrink-0 group-hover:bg-blue-500 group-hover:text-white transition-colors">
+                            <span
+                                class="material-icons text-blue-400 group-hover:text-white transition-colors">fact_check</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-200">What registrations are mandatory</h4>
+                            <p class="text-sm text-slate-400">Shop & Establishment, Trade License, FSSAI, and more.</p>
+                        </div>
+                    </div>
+
+                    <div
+                        class="flex items-start space-x-4 group p-4 rounded-xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/5">
+                        <div
+                            class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center shrink-0 group-hover:bg-green-500 group-hover:text-white transition-colors">
+                            <span
+                                class="material-icons text-green-400 group-hover:text-white transition-colors">account_balance</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-200">How to prepare for bank finance</h4>
+                            <p class="text-sm text-slate-400">Project reports and CMA data for loan applications.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-white/10">
+                    <p class="text-slate-400 mb-6 italic">We provide structured consultation before you proceed.</p>
+                    <a href="https://wa.me/919365828122" target="_blank"
+                        class="inline-flex items-center space-x-2 bg-gradient-to-r from-primary to-accent-purple hover:opacity-90 text-white px-8 py-4 rounded-lg font-bold transition-all glow-effect">
+                        <span>Book Startup Consultation</span>
+                        <span class="material-icons">arrow_forward</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="py-24 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-20">
+                <h2 class="text-3xl md:text-5xl font-bold mb-4">Services
+                </h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Providing precise Income Tax, GST, and Audit solutions
+                    alongside advanced Financial Modelling for modern enterprises.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- 1. Business Registration -->
+                <div class="glass-card p-8 rounded-xl relative overflow-hidden group transition-all duration-300 h-fit">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <span class="material-icons text-8xl">domain</span>
+                    </div>
+                    <div class="w-12 h-12 bg-primary/20 rounded flex items-center justify-center mb-6">
+                        <span class="material-icons text-primary">app_registration</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Business Registration</h3>
+                    <ul class="space-y-3 text-slate-400 text-sm">
+                        <li>• Proprietorship</li>
+                        <li>• Private Limited Company</li>
+                        <li>• LLP Registration</li>
+                    </ul>
+                    <div id="more-registration" class="hidden space-y-3 text-slate-400 text-sm mt-3">
+                        <ul class="space-y-3">
+                            <li>• Society / Trust / NGO (Assam)</li>
+                            <li>• Co-Operative Society</li>
+                            <li>• GST Registration</li>
+                            <li>• Import Export Code (IEC)</li>
+                            <li>• MSME Registration</li>
+                            <li>• Trade License (Assam)</li>
+                            <li>• FSSAI, ISO, GEM</li>
+                            <li>• PAN / TAN</li>
+                            <li>• Digital Signature (DSC)</li>
+                        </ul>
+                    </div>
+                    <button onclick="toggleService('more-registration', this)"
+                        class="text-primary text-xs font-bold uppercase tracking-wider mt-4 hover:text-accent-purple transition-colors flex items-center gap-1">
+                        See More <span class="material-icons text-sm">expand_more</span>
+                    </button>
+                </div>
+
+                <!-- 2. Taxation & Compliance -->
+                <div class="glass-card p-8 rounded-xl relative overflow-hidden group transition-all duration-300 h-fit">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <span class="material-icons text-8xl">receipt_long</span>
+                    </div>
+                    <div class="w-12 h-12 bg-accent-purple/20 rounded flex items-center justify-center mb-6">
+                        <span class="material-icons text-accent-purple">description</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Taxation & Compliance</h3>
+                    <ul class="space-y-3 text-slate-400 text-sm">
+                        <li>• Income Tax Return Filing</li>
+                        <li>• Income Tax Audit</li>
+                        <li>• GST Returns</li>
+                    </ul>
+                    <div id="more-taxation" class="hidden space-y-3 text-slate-400 text-sm mt-3">
+                        <ul class="space-y-3">
+                            <li>• GST Notices</li>
+                            <li>• Income Tax Notices</li>
+                            <li>• ROC Compliance</li>
+                            <li>• LLP Compliance</li>
+                            <li>• Accounting Compliance</li>
+                        </ul>
+                    </div>
+                    <button onclick="toggleService('more-taxation', this)"
+                        class="text-accent-purple text-xs font-bold uppercase tracking-wider mt-4 hover:text-primary transition-colors flex items-center gap-1">
+                        See More <span class="material-icons text-sm">expand_more</span>
+                    </button>
+                </div>
+
+                <!-- 3. Project & Financial Reports -->
+                <div class="glass-card p-8 rounded-xl relative overflow-hidden group transition-all duration-300 h-fit">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <span class="material-icons text-8xl">analytics</span>
+                    </div>
+                    <div class="w-12 h-12 bg-white/10 rounded flex items-center justify-center mb-6">
+                        <span class="material-icons text-slate-100">assessment</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Project & Financial Reports</h3>
+                    <ul class="space-y-3 text-slate-400 text-sm">
+                        <li>• Detailed Project Report (DPR)</li>
+                        <li>• CMA Report</li>
+                        <li>• NGO Project Report</li>
+                    </ul>
+                    <div id="more-reports" class="hidden space-y-3 text-slate-400 text-sm mt-3">
+                        <ul class="space-y-3">
+                            <li>• Financial Projections</li>
+                        </ul>
+                    </div>
+                    <button onclick="toggleService('more-reports', this)"
+                        class="text-white text-xs font-bold uppercase tracking-wider mt-4 hover:text-primary transition-colors flex items-center gap-1">
+                        See More <span class="material-icons text-sm">expand_more</span>
+                    </button>
+                </div>
+
+                <!-- 4. Labour Law Compliance -->
+                <div class="glass-card p-8 rounded-xl relative overflow-hidden group transition-all duration-300 h-fit">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <span class="material-icons text-8xl">groups</span>
+                    </div>
+                    <div class="w-12 h-12 bg-primary/20 rounded flex items-center justify-center mb-6">
+                        <span class="material-icons text-primary">engineering</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Labour Law Compliance</h3>
+                    <ul class="space-y-3 text-slate-400 text-sm">
+                        <li>• EPF Registration</li>
+                        <li>• ESIC Registration</li>
+                        <li>• EPF & ESIC Returns</li>
+                    </ul>
+                    <div id="more-labour" class="hidden space-y-3 text-slate-400 text-sm mt-3">
+                        <ul class="space-y-3">
+                            <li>• EPF Withdrawal / Refund</li>
+                        </ul>
+                    </div>
+                    <button onclick="toggleService('more-labour', this)"
+                        class="text-primary text-xs font-bold uppercase tracking-wider mt-4 hover:text-accent-purple transition-colors flex items-center gap-1">
+                        See More <span class="material-icons text-sm">expand_more</span>
+                    </button>
+                </div>
+
+                <!-- 5. Legal & Documentation -->
+                <div class="glass-card p-8 rounded-xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <span class="material-icons text-8xl">gavel</span>
+                    </div>
+                    <div class="w-12 h-12 bg-accent-purple/20 rounded flex items-center justify-center mb-6">
+                        <span class="material-icons text-accent-purple">policy</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Legal & Docs</h3>
+                    <ul class="space-y-3 text-slate-400 text-sm">
+                        <li>• Trademark Registration</li>
+                        <li>• Business Agreements / NDA</li>
+                        <li>• 12A / 80G Registration</li>
+                    </ul>
+                </div>
+
+                <!-- 6. Business Consulting -->
+                <div class="glass-card p-8 rounded-xl relative overflow-hidden group transition-all duration-300 h-fit">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <span class="material-icons text-8xl">lightbulb</span>
+                    </div>
+                    <div class="w-12 h-12 bg-white/10 rounded flex items-center justify-center mb-6">
+                        <span class="material-icons text-slate-100">school</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Business Consulting</h3>
+                    <ul class="space-y-3 text-slate-400 text-sm">
+                        <li>• Structuring Advice</li>
+                        <li>• Tax Planning</li>
+                        <li>• Cash Flow Planning</li>
+                    </ul>
+                    <div id="more-consulting" class="hidden space-y-3 text-slate-400 text-sm mt-3">
+                        <ul class="space-y-3">
+                            <li>• Compliance System Setup</li>
+                            <li>• Risk Identification</li>
+                            <li>• Loan Preparation Support Consulting is provided through scheduled sessions.</li>
+                        </ul>
+                    </div>
+                    <button onclick="toggleService('more-consulting', this)"
+                        class="text-white text-xs font-bold uppercase tracking-wider mt-4 hover:text-primary transition-colors flex items-center gap-1">
+                        See More <span class="material-icons text-sm">expand_more</span>
+                    </button>
+                </div>
+
+                <!-- 7. Legal Documentation & Regulatory Support -->
+                <div class="glass-card p-8 rounded-xl relative overflow-hidden group transition-all duration-300 h-fit">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <span class="material-icons text-8xl">history_edu</span>
+                    </div>
+                    <div class="w-12 h-12 bg-accent-purple/20 rounded flex items-center justify-center mb-6">
+                        <span class="material-icons text-accent-purple">edit_note</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Legal Documentation & Regulatory Support</h3>
+                    <ul class="space-y-3 text-slate-400 text-sm">
+                        <li>• Partnership Deed Drafting</li>
+                        <li>• LLP Agreement Drafting</li>
+                        <li>• Shareholders Agreement</li>
+                    </ul>
+                    <div id="more-legal-drafting" class="hidden space-y-3 text-slate-400 text-sm mt-3">
+                        <ul class="space-y-3">
+                            <li>• Founders Agreement</li>
+                            <li>• Employment Agreements</li>
+                            <li>• Vendor / Service Agreements</li>
+                            <li>• NDA (Non-Disclosure Agreement)</li>
+                            <li>• Memorandum of Understanding (MOU)</li>
+                            <li>• Legal Notice Drafting</li>
+                            <li>• Contract Review & Compliance Check</li>
+                        </ul>
+                    </div>
+                    <button onclick="toggleService('more-legal-drafting', this)"
+                        class="text-accent-purple text-xs font-bold uppercase tracking-wider mt-4 hover:text-primary transition-colors flex items-center gap-1">
+                        See More <span class="material-icons text-sm">expand_more</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-24 bg-primary/5">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+            <div class="grid grid-cols-2 gap-4">
+                <div class="space-y-4">
+                    <div
+                        class="glass p-6 rounded-xl aspect-square flex flex-col justify-center items-center text-center">
+                        <span class="material-icons text-primary text-4xl mb-4 opacity-80">history_edu</span>
+                        <span class="text-3xl font-bold text-primary">7+</span>
+                        <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Years Experience</p>
+                    </div>
+                    <div
+                        class="glass-card p-6 rounded-xl aspect-square flex flex-col justify-center items-center text-center">
+                        <span class="material-icons text-accent-purple text-4xl mb-4 opacity-80">groups</span>
+                        <span class="text-3xl font-bold text-accent-purple">100+</span>
+                        <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Digital Clients</p>
+                    </div>
+                </div>
+                <div class="space-y-4 pt-12">
+                    <div
+                        class="glass-card p-6 rounded-xl aspect-square flex flex-col justify-center items-center text-center">
+                        <span class="material-icons text-white text-4xl mb-4 opacity-80">cloud_done</span>
+                        <span class="text-3xl font-bold text-white">100%</span>
+                        <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Cloud Adoption</p>
+                    </div>
+                    <div
+                        class="glass p-6 rounded-xl aspect-square flex flex-col justify-center items-center text-center">
+                        <span class="material-icons text-primary text-4xl mb-4 opacity-80">support_agent</span>
+                        <span class="text-3xl font-bold text-primary">24/7</span>
+                        <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Expert Access</p>
+                    </div>
+                </div>
+            </div>
+            <div class="space-y-6">
+                <h2 class="text-4xl font-bold leading-tight">Structured Approach. <br /><span
+                        class="text-primary">Regulatory
+                        Accuracy.</span></h2>
+                <p class="text-slate-400 leading-relaxed">
+                    Deka & Associates provides taxation, registration and compliance services with a structured
+                    approach. We focus on documentation, timelines and regulatory accuracy. Our objective is simple:
                 </p>
-<div class="space-y-4 pt-4">
-<div class="flex items-start space-x-4">
-<div class="mt-1 w-6 h-6 rounded bg-primary/20 flex items-center justify-center flex-shrink-0">
-<span class="material-icons text-primary text-xs">auto_awesome</span>
-</div>
-<div>
-<h4 class="font-bold text-white">Real-time Reconciliation</h4>
-<p class="text-sm text-slate-400">Automated matching of GST data with ledgers to eliminate month-end filing stress.</p>
-</div>
-</div>
-<div class="flex items-start space-x-4">
-<div class="mt-1 w-6 h-6 rounded bg-accent-purple/20 flex items-center justify-center flex-shrink-0">
-<span class="material-icons text-accent-purple text-xs">analytics</span>
-</div>
-<div>
-<h4 class="font-bold text-white">Scenario Forecasting</h4>
-<p class="text-sm text-slate-400">Advanced financial models that simulate growth and tax impacts before you make business decisions.</p>
-</div>
-</div>
-<div class="flex items-start space-x-4">
-<div class="mt-1 w-6 h-6 rounded bg-white/10 flex items-center justify-center flex-shrink-0">
-<span class="material-icons text-slate-100 text-xs">verified</span>
-</div>
-<div>
-<h4 class="font-bold text-white">Data-Led Audits</h4>
-<p class="text-sm text-slate-400">Our digital audit trail ensures 100% compliance transparency for statutory and internal reporting.</p>
-</div>
-</div>
-<div class="flex items-start space-x-4">
-<div class="mt-1 w-6 h-6 rounded bg-primary/20 flex items-center justify-center flex-shrink-0">
-<span class="material-icons text-primary text-xs">security</span>
-</div>
-<div>
-<h4 class="font-bold text-white">Enterprise Security</h4>
-<p class="text-sm text-slate-400">Military-grade encryption for all financial records hosted on our private cloud portal.</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
+                <p class="text-slate-300 font-medium leading-relaxed border-l-4 border-primary pl-4">
+                    Help clients remain compliant and financially organised. We work with discipline and expect the same
+                    seriousness from our clients.
+                </p>
+            </div>
+        </div>
+    </section>
 
-<section id="contact" class="py-24">
-<div class="max-w-7xl mx-auto px-6">
-<div class="glass rounded-2xl overflow-hidden grid md:grid-cols-3">
-<div class="p-12 md:col-span-1 space-y-6">
-<h3 class="text-3xl font-bold uppercase">Our <br/>Headquarters</h3>
-<div class="space-y-4">
-<div>
-<p class="text-xs uppercase font-bold text-primary mb-1">Registered Address</p>
-<p class="text-slate-400 text-sm leading-relaxed">
-                            H. No 8, Chandi Charan Deka,<br>
-                            Kamrup (M), Zoo Road, Akashi Path<br>
-                            Guwahati, Assam, 781024 India
-                        </p>
-</div>
-<div>
-<p class="text-xs uppercase font-bold text-primary mb-1">Availability</p>
-<p class="text-slate-200 text-sm font-bold italic">Sunday: Closed</p>
-<p class="text-slate-400 text-xs">Mon-Sat: By Appointment Only</p>
-</div>
-<div class="pt-4">
-<p class="text-lg font-bold">banjeet.official@gmail.com</p>
-<p class="text-slate-400 text-sm">+91 93658 28122</p>
-</div>
-</div>
-</div>
-<div class="md:col-span-2 relative min-h-[400px]">
-<img alt="Map View" class="absolute inset-0 w-full h-full object-cover grayscale opacity-50" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAa9fwQimrSz8NA5b5arJKyHZDnyryyWFQ5erbYcsZVyyX4Qhi4Wakwp8wGmxU138_VTSfGN5_9swmO5kLbCui30PdGK6He1jTg4leWXoU5MnsKyAYyKNcdLH5oOOfNr8RkrtUupRbnMJL88eFRG1852PQ80cT-SGAc4tsKBml4aIOTXG0yI8OoJNCFo1EgWUwnbR2m9G22nIw1wWO7BJsFMBhzuT0eVdnlZWa7NTs-QR-KnjiA-N78OGQ7WIsdNSF4TJKlyJm9CjSB"/>
-<div class="absolute inset-0 bg-gradient-to-r from-background-dark to-transparent"></div>
-<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-<div class="relative">
-<div class="absolute -inset-4 bg-primary/40 rounded-full blur-xl animate-pulse"></div>
-<span class="material-icons text-primary text-4xl relative z-10">location_on</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
+    <!-- Starting a Venture Section -->
+    <section id="starting-a-venture" class="py-24 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 text-center mb-16">
+            <div
+                class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-bold uppercase tracking-widest mb-4">
+                <span>Subject Matter</span>
+            </div>
+            <h2 class="text-3xl md:text-5xl font-bold mb-4">Planning to Start a <span
+                    class="text-primary">Venture?</span></h2>
+            <p class="text-slate-400 max-w-2xl mx-auto">Before registration, clarity is required. During consultation,
+                we discuss:</p>
+        </div>
 
-<footer class="bg-background-dark border-t border-white/5 py-12 px-6">
-<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center space-y-8 md:space-y-0">
-<div class="flex flex-col items-center md:items-start space-y-4">
-<div class="flex items-center space-x-3">
-<img src="logo.webp" alt="DEKA & ASSOCIATES Logo" class="w-6 h-6 object-contain">
-<span class="text-xl font-bold uppercase tracking-tight">DEKA <span class="text-primary">&</span> ASSOCIATES</span>
-</div>
-<p class="text-slate-500 text-xs text-center md:text-left uppercase">© 2026 DEKA & ASSOCIATES. All rights reserved.<br/>H. No 8, Akashi Path, Guwahati, Assam 781024.</p>
-</div>
-<div class="flex space-x-12">
-<div class="space-y-3">
-<h5 class="text-sm font-bold uppercase tracking-wider">Services</h5>
-<ul class="text-xs text-slate-500 space-y-2">
-<li>Income Tax & GST</li>
-<li>Audit & Compliance</li>
-<li>Financial Modelling</li>
-</ul>
-</div>
-</div>
-</div>
-</footer>
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div
+                    class="glass-card p-6 rounded-xl flex items-center space-x-4 group hover:bg-white/5 transition-colors">
+                    <div
+                        class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center shrink-0 group-hover:bg-blue-500 group-hover:text-white transition-colors">
+                        <span
+                            class="material-icons text-blue-400 group-hover:text-white transition-colors">category</span>
+                    </div>
+                    <div>
+                        <span class="font-bold block text-slate-200">Nature of Business</span>
+                    </div>
+                </div>
 
-</body></html>
+                <div
+                    class="glass-card p-6 rounded-xl flex items-center space-x-4 group hover:bg-white/5 transition-colors">
+                    <div
+                        class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0 group-hover:bg-purple-500 group-hover:text-white transition-colors">
+                        <span
+                            class="material-icons text-purple-400 group-hover:text-white transition-colors">domain</span>
+                    </div>
+                    <div>
+                        <span class="font-bold block text-slate-200">Suitable Structure</span>
+                        <span class="text-xs text-slate-400">(Proprietorship / LLP / Pvt Ltd etc.)</span>
+                    </div>
+                </div>
+
+                <div
+                    class="glass-card p-6 rounded-xl flex items-center space-x-4 group hover:bg-white/5 transition-colors">
+                    <div
+                        class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center shrink-0 group-hover:bg-green-500 group-hover:text-white transition-colors">
+                        <span
+                            class="material-icons text-green-400 group-hover:text-white transition-colors">how_to_reg</span>
+                    </div>
+                    <div>
+                        <span class="font-bold block text-slate-200">Registration Requirements</span>
+                    </div>
+                </div>
+
+                <div
+                    class="glass-card p-6 rounded-xl flex items-center space-x-4 group hover:bg-white/5 transition-colors">
+                    <div
+                        class="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center shrink-0 group-hover:bg-red-500 group-hover:text-white transition-colors">
+                        <span
+                            class="material-icons text-red-400 group-hover:text-white transition-colors">percent</span>
+                    </div>
+                    <div>
+                        <span class="font-bold block text-slate-200">Tax Implications</span>
+                    </div>
+                </div>
+
+                <div
+                    class="glass-card p-6 rounded-xl flex items-center space-x-4 group hover:bg-white/5 transition-colors">
+                    <div
+                        class="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center shrink-0 group-hover:bg-yellow-500 group-hover:text-white transition-colors">
+                        <span
+                            class="material-icons text-yellow-400 group-hover:text-white transition-colors">calculate</span>
+                    </div>
+                    <div>
+                        <span class="font-bold block text-slate-200">Compliance Costs</span>
+                    </div>
+                </div>
+
+                <div
+                    class="glass-card p-6 rounded-xl flex items-center space-x-4 group hover:bg-white/5 transition-colors">
+                    <div
+                        class="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center shrink-0 group-hover:bg-cyan-500 group-hover:text-white transition-colors">
+                        <span
+                            class="material-icons text-cyan-400 group-hover:text-white transition-colors">description</span>
+                    </div>
+                    <div>
+                        <span class="font-bold block text-slate-200">Bank Loan Docs</span>
+                        <span class="text-xs text-slate-400">Documentation requirements</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center border-t border-white/10 pt-12">
+                <p class="text-slate-300 text-lg mb-2">This session helps avoid future structural mistakes.</p>
+                <p class="text-slate-400 mb-8 italic">Consultation is structured and time-bound.</p>
+                <a href="https://wa.me/919365828122" target="_blank"
+                    class="inline-flex items-center space-x-2 bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-lg font-bold transition-all glow-effect">
+                    <span>Book Consultation</span>
+                    <span class="material-icons">event</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="py-24 relative overflow-hidden">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold mb-4">Frequently Asked <span
+                        class="text-primary">Questions</span></h2>
+                <p class="text-slate-400">Common queries about starting and managing your business.</p>
+            </div>
+            <div class="space-y-4 max-w-3xl mx-auto">
+                <!-- 1. I want to start a business -->
+                <details class="glass-card rounded-xl group">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+                        <span class="font-bold">1. I want to start a business. Where should I begin?</span>
+                        <span
+                            class="material-icons text-primary transition-transform group-open:rotate-180">expand_more</span>
+                    </summary>
+                    <div class="px-6 pb-6 text-slate-400 text-sm leading-relaxed">
+                        <p>Start with a structured consultation. Before registration, we review:</p>
+                        <ul class="list-disc list-inside mt-2 space-y-1">
+                            <li>Nature of business</li>
+                            <li>Suitable structure (Proprietorship / LLP / Pvt Ltd)</li>
+                            <li>GST applicability</li>
+                            <li>Estimated compliance cost</li>
+                            <li>Required licenses</li>
+                        </ul>
+                        <p class="mt-2 text-primary/80 font-medium">Registration should follow clarity, not
+                            guesswork.</p>
+                    </div>
+                </details>
+
+                <!-- 2. Which business structure is better -->
+                <details class="glass-card rounded-xl group">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+                        <span class="font-bold">2. Which business structure is better — Proprietorship, LLP
+                            or Private Limited?</span>
+                        <span
+                            class="material-icons text-primary transition-transform group-open:rotate-180">expand_more</span>
+                    </summary>
+                    <div class="px-6 pb-6 text-slate-400 text-sm leading-relaxed">
+                        <p>It depends on:</p>
+                        <ul class="list-disc list-inside mt-2 space-y-1">
+                            <li>Number of owners</li>
+                            <li>Risk exposure</li>
+                            <li>Investment size</li>
+                            <li>Funding plans</li>
+                            <li>Long-term growth strategy</li>
+                        </ul>
+                        <p class="mt-2 text-primary/80 font-medium">There is no "best" structure. There is
+                            only "suitable".</p>
+                    </div>
+                </details>
+
+                <!-- 3. Is GST registration mandatory? -->
+                <details class="glass-card rounded-xl group">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+                        <span class="font-bold">3. Is GST registration mandatory?</span>
+                        <span
+                            class="material-icons text-primary transition-transform group-open:rotate-180">expand_more</span>
+                    </summary>
+                    <div class="px-6 pb-6 text-slate-400 text-sm leading-relaxed">
+                        <p>GST registration depends on:</p>
+                        <ul class="list-disc list-inside mt-2 space-y-1">
+                            <li>Annual turnover</li>
+                            <li>Type of supply</li>
+                            <li>Interstate transactions</li>
+                            <li>E-commerce activity</li>
+                        </ul>
+                        <p class="mt-2">We assess eligibility before filing.</p>
+                    </div>
+                </details>
+
+                <!-- 4. GST Notice -->
+                <details class="glass-card rounded-xl group">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+                        <span class="font-bold">4. I received a GST or Income Tax notice. What should I
+                            do?</span>
+                        <span
+                            class="material-icons text-primary transition-transform group-open:rotate-180">expand_more</span>
+                    </summary>
+                    <div class="px-6 pb-6 text-slate-400 text-sm leading-relaxed">
+                        Do not ignore it. Share the notice immediately. We review, prepare response
+                        documentation, and guide further action. <span class="text-red-400">Delay increases
+                            risk.</span>
+                    </div>
+                </details>
+
+                <!-- 5. Salaried Individual ITR -->
+                <details class="glass-card rounded-xl group">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+                        <span class="font-bold">5. I am a salaried individual. Do I still need to file
+                            Income Tax Return?</span>
+                        <span
+                            class="material-icons text-primary transition-transform group-open:rotate-180">expand_more</span>
+                    </summary>
+                    <div class="px-6 pb-6 text-slate-400 text-sm leading-relaxed">
+                        <p>In most cases, yes. ITR may be required for:</p>
+                        <ul class="list-disc list-inside mt-2 space-y-1">
+                            <li>Income above basic exemption limit</li>
+                            <li>Claiming refunds</li>
+                            <li>Visa processing</li>
+                            <li>Loan applications</li>
+                            <li>Capital gains</li>
+                            <li>Multiple income sources</li>
+                        </ul>
+                        <p class="mt-2">Each case is evaluated individually.</p>
+                    </div>
+                </details>
+
+                <!-- 6. Small Business Compliance -->
+                <details class="glass-card rounded-xl group">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+                        <span class="font-bold">6. I run a small business. Do I need regular compliance
+                            support?</span>
+                        <span
+                            class="material-icons text-primary transition-transform group-open:rotate-180">expand_more</span>
+                    </summary>
+                    <div class="px-6 pb-6 text-slate-400 text-sm leading-relaxed">
+                        <p>Yes, if you have:</p>
+                        <ul class="list-disc list-inside mt-2 space-y-1">
+                            <li>GST registration</li>
+                            <li>Employees</li>
+                            <li>Company / LLP structure</li>
+                            <li>Regular turnover</li>
+                        </ul>
+                        <p class="mt-2 text-primary/80 font-medium">Compliance is ongoing, not one-time.</p>
+                    </div>
+                </details>
+
+                <!-- 7. NGOs and Trusts -->
+                <details class="glass-card rounded-xl group">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+                        <span class="font-bold">7. Do you help NGOs and Trusts?</span>
+                        <span
+                            class="material-icons text-primary transition-transform group-open:rotate-180">expand_more</span>
+                    </summary>
+                    <div class="px-6 pb-6 text-slate-400 text-sm leading-relaxed">
+                        <p>Yes. We assist with:</p>
+                        <ul class="list-disc list-inside mt-2 space-y-1">
+                            <li>Registration (Society / Trust / NGO – Assam)</li>
+                            <li>12A / 80G registration</li>
+                            <li>Project reports</li>
+                            <li>Accounting compliance</li>
+                            <li>Statutory filings</li>
+                        </ul>
+                        <p class="mt-2">NGOs must maintain documentation discipline.</p>
+                    </div>
+                </details>
+
+                <!-- 8. NRI Services -->
+                <details class="glass-card rounded-xl group">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+                        <span class="font-bold">8. I am an NRI. Can you handle my tax matters in
+                            India?</span>
+                        <span
+                            class="material-icons text-primary transition-transform group-open:rotate-180">expand_more</span>
+                    </summary>
+                    <div class="px-6 pb-6 text-slate-400 text-sm leading-relaxed">
+                        <p>Yes. Services include:</p>
+                        <ul class="list-disc list-inside mt-2 space-y-1">
+                            <li>Income Tax Return filing</li>
+                            <li>Capital gains computation</li>
+                            <li>Property-related taxation</li>
+                            <li>Compliance support</li>
+                        </ul>
+                        <p class="mt-2">Documentation may be coordinated digitally.</p>
+                    </div>
+                </details>
+
+                <!-- 9. Project Reports -->
+                <details class="glass-card rounded-xl group">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+                        <span class="font-bold">9. Do you prepare project reports and CMA reports for bank
+                            loans?</span>
+                        <span
+                            class="material-icons text-primary transition-transform group-open:rotate-180">expand_more</span>
+                    </summary>
+                    <div class="px-6 pb-6 text-slate-400 text-sm leading-relaxed">
+                        <p>Yes. We prepare:</p>
+                        <ul class="list-disc list-inside mt-2 space-y-1">
+                            <li>Detailed Project Reports</li>
+                            <li>CMA Reports</li>
+                            <li>Financial Projections</li>
+                        </ul>
+                        <p class="mt-2 text-primary/80 font-medium">Loan approval depends on bank
+                            evaluation.</p>
+                    </div>
+                </details>
+
+                <!-- 10. Legal Drafting -->
+                <details class="glass-card rounded-xl group">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+                        <span class="font-bold">10. Do you provide legal drafting services?</span>
+                        <span
+                            class="material-icons text-primary transition-transform group-open:rotate-180">expand_more</span>
+                    </summary>
+                    <div class="px-6 pb-6 text-slate-400 text-sm leading-relaxed">
+                        Yes. Legal documentation and drafting support is facilitated through associated
+                        legal professionals in accordance with applicable regulations.
+                    </div>
+                </details>
+
+                <!-- 11. Consultation Fees -->
+                <details class="glass-card rounded-xl group">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+                        <span class="font-bold">11. Are consultation fees refundable?</span>
+                        <span
+                            class="material-icons text-primary transition-transform group-open:rotate-180">expand_more</span>
+                    </summary>
+                    <div class="px-6 pb-6 text-slate-400 text-sm leading-relaxed">
+                        No. Consultation fees are non-refundable. They may be adjustable against confirmed
+                        service engagement if agreed in advance.
+                    </div>
+                </details>
+
+                <!-- 12. Guarantee -->
+                <details class="glass-card rounded-xl group">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+                        <span class="font-bold">12. Do you guarantee approval of registrations or
+                            licenses?</span>
+                        <span
+                            class="material-icons text-primary transition-transform group-open:rotate-180">expand_more</span>
+                    </summary>
+                    <div class="px-6 pb-6 text-slate-400 text-sm leading-relaxed">
+                        No. Approvals are subject to government authority review. We ensure proper
+                        documentation and compliance process.
+                    </div>
+                </details>
+
+                <!-- 13. How to Proceed -->
+                <details class="glass-card rounded-xl group shadow-[0_0_15px_rgba(99,102,241,0.2)] border-primary/30">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+                        <span class="font-bold text-primary">13. How do I proceed?</span>
+                        <span
+                            class="material-icons text-primary transition-transform group-open:rotate-180">expand_more</span>
+                    </summary>
+                    <div class="px-6 pb-6 text-slate-400 text-sm leading-relaxed">
+                        <p>Schedule a consultation. Discuss your requirement clearly. Proceed after
+                            understanding scope, timeline and fees.</p>
+                        <a href="https://wa.me/919365828122" target="_blank"
+                            class="inline-flex items-center space-x-2 mt-4 text-white bg-primary px-4 py-2 rounded text-xs font-bold uppercase tracking-wider hover:opacity-90 transition-opacity">
+                            <span>Book Now</span>
+                            <span class="material-icons text-sm">arrow_forward</span>
+                        </a>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-24">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="glass rounded-2xl overflow-hidden grid md:grid-cols-3">
+                <div class="p-12 md:col-span-1 space-y-6">
+                    <h3 class="text-3xl font-bold uppercase">Our <br />Headquarters</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-xs uppercase font-bold text-primary mb-1">Registered Address</p>
+                            <p class="text-slate-400 text-sm leading-relaxed">
+                                #09, Bylane 09, Zoo Tiniali,<br>
+                                Kamrup Metro, Guwahati, Assam - 781024
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-xs uppercase font-bold text-primary mb-1">Availability</p>
+                            <p class="text-slate-200 text-sm font-bold italic">Sunday: Closed</p>
+                            <p class="text-slate-400 text-xs">Mon-Sat: 10:00 AM to 05:00 PM (By Appointment)</p>
+                        </div>
+                        <div class="pt-4">
+                            <p class="text-lg font-bold">banjeet.official@gmail.com</p>
+                            <p class="text-slate-400 text-sm">+91 93658 28122</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:col-span-2 relative min-h-[400px]">
+                    <img alt="Map View" class="absolute inset-0 w-full h-full object-cover grayscale opacity-50"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAa9fwQimrSz8NA5b5arJKyHZDnyryyWFQ5erbYcsZVyyX4Qhi4Wakwp8wGmxU138_VTSfGN5_9swmO5kLbCui30PdGK6He1jTg4leWXoU5MnsKyAYyKNcdLH5oOOfNr8RkrtUupRbnMJL88eFRG1852PQ80cT-SGAc4tsKBml4aIOTXG0yI8OoJNCFo1EgWUwnbR2m9G22nIw1wWO7BJsFMBhzuT0eVdnlZWa7NTs-QR-KnjiA-N78OGQ7WIsdNSF4TJKlyJm9CjSB" />
+                    <div class="absolute inset-0 bg-gradient-to-r from-background-dark to-transparent"></div>
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                        <div class="relative">
+                            <div class="absolute -inset-4 bg-primary/40 rounded-full blur-xl animate-pulse"></div>
+                            <span class="material-icons text-primary text-4xl relative z-10">location_on</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-background-dark border-t border-white/5 py-12 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center space-y-8 md:space-y-0">
+            <div class="flex flex-col items-center md:items-start space-y-4">
+                <div class="flex items-center space-x-3">
+                    <img src="logo.webp" alt="DEKA & ASSOCIATES Logo" class="w-6 h-6 object-contain">
+                    <span class="text-xl font-bold uppercase tracking-tight">DEKA <span class="text-primary">&</span>
+                        ASSOCIATES</span>
+                </div>
+                <p class="text-slate-500 text-xs text-center md:text-left uppercase">© 2026 DEKA & ASSOCIATES. All
+                    rights reserved.<br />H. No 8, Akashi Path, Guwahati, Assam 781024.</p>
+            </div>
+            <div class="flex space-x-12">
+                <div class="space-y-3">
+                    <h5 class="text-sm font-bold uppercase tracking-wider">Legal</h5>
+                    <ul class="text-xs text-slate-500 space-y-2">
+                        <li><a href="privacy.html" class="hover:text-primary transition-colors">Privacy Policy</a></li>
+                        <li><a href="terms.html" class="hover:text-primary transition-colors">Terms & Conditions</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Admin Panel | Deka & Associates</title>
+    <link rel="icon" type="image/webp" href="./logo.webp">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1e40af",
+                        "background-light": "#f8fafc",
+                        "accent-purple": "#2563eb",
+                    },
+                    fontFamily: {
+                        "display": ["DM Sans", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-slate-100 font-display text-slate-900 min-h-screen">
+
+    <!-- Login Screen -->
+    <div id="login-section" class="flex items-center justify-center min-h-screen p-6">
+        <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md border border-slate-200">
+            <div class="text-center mb-8">
+                <img src="./logo.webp" alt="Deka & Associates Logo"
+                    class="w-12 h-12 object-contain mx-auto mb-4 rounded">
+                <h1 class="text-2xl font-bold text-slate-800">Admin Login</h1>
+                <p class="text-slate-500 text-sm">Sign in to manage bookings</p>
+            </div>
+
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Email</label>
+                    <input type="email" name="email" required
+                        class="w-full rounded-lg border-slate-300 focus:border-primary focus:ring-primary">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
+                    <input type="password" name="password" required
+                        class="w-full rounded-lg border-slate-300 focus:border-primary focus:ring-primary">
+                </div>
+                <!-- Error Message -->
+                <div id="login-error" class="hidden text-red-600 text-sm bg-red-50 p-3 rounded"></div>
+
+                <button type="submit"
+                    class="w-full bg-slate-900 text-white py-3 rounded-lg font-bold hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl">
+                    Sign In
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard" class="hidden min-h-screen pb-12">
+
+        <!-- Navbar -->
+        <nav class="bg-white border-b border-slate-200 sticky top-0 z-30">
+            <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <img src="./logo.webp" alt="Deka & Associates " class="w-8 h-8 object-contain rounded">
+                    <span class="text-lg font-bold tracking-tight">Admin <span
+                            class="text-slate-400">Panel</span></span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span id="admin-email" class="text-sm font-medium text-slate-500 hidden md:inline"></span>
+                    <button onclick="adminSignOut()"
+                        class="text-sm font-medium text-red-600 hover:text-red-800 transition-colors bg-red-50 px-3 py-1.5 rounded-lg border border-red-100">
+                        Sign Out
+                    </button>
+                    <button onclick="openSettings()"
+                        class="text-sm font-medium text-slate-600 hover:text-slate-800 transition-colors bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100 flex items-center gap-1">
+                        <span class="material-icons text-sm">settings</span> Settings
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="max-w-7xl mx-auto px-6 py-8">
+
+            <!-- Filters -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                <h2 class="text-2xl font-bold text-slate-800">Manage Bookings</h2>
+
+                <div class="flex bg-white p-1 rounded-lg border border-slate-200 shadow-sm overflow-x-auto">
+                    <button onclick="filterBookings('All')" id="filter-all"
+                        class="px-4 py-2 text-sm font-medium rounded-md bg-slate-100 text-slate-900 transition-colors whitespace-nowrap">All</button>
+                    <button onclick="filterBookings('Pending')" id="filter-pending"
+                        class="px-4 py-2 text-sm font-medium rounded-md text-slate-500 hover:text-slate-900 transition-colors whitespace-nowrap">Pending</button>
+                    <button onclick="filterBookings('Accepted')" id="filter-accepted"
+                        class="px-4 py-2 text-sm font-medium rounded-md text-slate-500 hover:text-slate-900 transition-colors whitespace-nowrap">Accepted</button>
+                    <button onclick="filterBookings('Completed')" id="filter-completed"
+                        class="px-4 py-2 text-sm font-medium rounded-md text-slate-500 hover:text-slate-900 transition-colors whitespace-nowrap">Completed</button>
+                    <button onclick="filterBookings('Rejected')" id="filter-rejected"
+                        class="px-4 py-2 text-sm font-medium rounded-md text-slate-500 hover:text-slate-900 transition-colors whitespace-nowrap">Rejected</button>
+                </div>
+            </div>
+
+            <!-- Bookings List -->
+            <div id="bookings-container" class="grid gap-6">
+                <!-- Dynamic Content -->
+                <div class="text-center py-12">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+                    <p class="mt-4 text-slate-500">Loading bookings...</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Business Details Modal -->
+    <div id="business-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeBusinessModal()"></div>
+        <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-white rounded-2xl shadow-2xl p-6 md:p-8 animate-fade-in-up">
+            <div class="flex justify-between items-start mb-6">
+                <h3 class="text-xl font-bold text-slate-900" id="biz-modal-title">Business Details</h3>
+                <button onclick="closeBusinessModal()" class="text-slate-400 hover:text-slate-600">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+
+            <div class="space-y-4 text-sm">
+                <div class="grid grid-cols-3 gap-2 border-b border-slate-100 pb-3">
+                    <span class="font-bold text-slate-500">Business Name</span>
+                    <span class="col-span-2 text-slate-900 font-medium" id="biz-modal-name">-</span>
+                </div>
+                <div class="grid grid-cols-3 gap-2 border-b border-slate-100 pb-3">
+                    <span class="font-bold text-slate-500">Client Name</span>
+                    <span class="col-span-2 text-slate-900" id="biz-modal-client">-</span>
+                </div>
+                <div class="grid grid-cols-3 gap-2 border-b border-slate-100 pb-3">
+                    <span class="font-bold text-slate-500">Role</span>
+                    <span class="col-span-2" id="biz-modal-role">-</span>
+                </div>
+                <div class="grid grid-cols-3 gap-2 border-b border-slate-100 pb-3">
+                    <span class="font-bold text-slate-500">Email</span>
+                    <span class="col-span-2 text-slate-900 font-mono" id="biz-modal-email">-</span>
+                </div>
+                <div class="grid grid-cols-3 gap-2 border-b border-slate-100 pb-3">
+                    <span class="font-bold text-slate-500">Phone</span>
+                    <span class="col-span-2 text-slate-900 font-mono" id="biz-modal-phone">-</span>
+                </div>
+                <div class="grid grid-cols-3 gap-2 pt-2">
+                    <span class="font-bold text-slate-500">Additional Details</span>
+                    <p class="col-span-2 text-slate-700 italic bg-slate-50 p-2 rounded" id="biz-modal-details">-</p>
+                </div>
+            </div>
+
+            <div class="mt-8 text-right">
+                <button onclick="closeBusinessModal()"
+                    class="px-4 py-2 bg-slate-100 text-slate-700 font-bold rounded-lg hover:bg-slate-200 transition-colors">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Accept Modal -->
+    <div id="accept-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeAcceptModal()"></div>
+        <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-2xl shadow-2xl p-6 md:p-8 animate-fade-in-up">
+            <h3 class="text-xl font-bold mb-4">Accept Booking</h3>
+            <p class="text-slate-600 mb-6 text-sm">Set an expected completion date for this service. The client will be
+                notified.</p>
+
+            <form id="accept-form" class="space-y-4">
+                <input type="hidden" name="booking_id" id="accept-booking-id">
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Expected Completion Date</label>
+                    <input type="date" name="completion_date" required
+                        class="w-full rounded-lg border-slate-300 focus:border-primary focus:ring-primary">
+                </div>
+
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="closeAcceptModal()"
+                        class="flex-1 px-4 py-2 border border-slate-300 rounded-lg text-slate-700 font-medium hover:bg-slate-50">Cancel</button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg font-bold hover:bg-green-700 shadow-md">Confirm
+                        & Accept</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeSettings()"></div>
+        <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-2xl shadow-2xl p-6 md:p-8 animate-fade-in-up">
+            <h3 class="text-xl font-bold text-slate-900 mb-4">System Settings</h3>
+
+            <form id="settings-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Referral Commission (%)</label>
+                    <div class="relative">
+                        <input type="number" id="setting-commission" required min="0" max="100" step="0.1"
+                            class="w-full pl-3 pr-8 py-2 rounded-lg border-slate-300 focus:border-primary focus:ring-primary">
+                        <span class="absolute right-3 top-2 text-slate-400 font-bold">%</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1">Updates the commission displayed on user dashboard.</p>
+                </div>
+
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="closeSettings()"
+                        class="flex-1 px-4 py-2 border border-slate-300 rounded-lg text-slate-700 font-medium hover:bg-slate-50">Cancel</button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2 bg-primary text-white rounded-lg font-bold hover:bg-primary/90 shadow-md">Save
+                        Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <!-- REMOVED shared js/supabase.js to avoid session conflict -->
+    <script>
+        // Initialize Unique Supabase Client for Admin (Isolated Session)
+        if (!window.SUPABASE_CONFIG) {
+            console.error('Supabase Config not found. Please create public/js/config.js');
+        }
+        const supabaseUrl = window.SUPABASE_CONFIG.url;
+        const supabaseKey = window.SUPABASE_CONFIG.key;
+
+        // Use a different storage key so Admin login doesn't overwrite User login
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey, {
+            auth: {
+                storageKey: 'supabase.auth.token-admin', // Unique key for Admin
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true
+            }
+        });
+
+        // DOM Elements
+        const loginSection = document.getElementById('login-section');
+        const adminDashboard = document.getElementById('admin-dashboard');
+        const loginForm = document.getElementById('login-form');
+        const loginError = document.getElementById('login-error');
+        const bookingsContainer = document.getElementById('bookings-container');
+        const acceptModal = document.getElementById('accept-modal');
+        const acceptForm = document.getElementById('accept-form');
+        const businessModal = document.getElementById('business-modal');
+        const settingsModal = document.getElementById('settings-modal');
+        const settingsForm = document.getElementById('settings-form');
+
+        let allBookings = [];
+        let currentFilter = 'All';
+
+        // ... existing code ...
+
+        // Settings Logic
+        function closeSettings() {
+            settingsModal.classList.add('hidden');
+        }
+
+        async function openSettings() {
+            settingsModal.classList.remove('hidden');
+            // Fetch current value
+            try {
+                const { data, error } = await _supabase
+                    .from('settings')
+                    .select('value')
+                    .eq('key', 'referral_commission')
+                    .single();
+
+                if (data) {
+                    document.getElementById('setting-commission').value = data.value;
+                }
+            } catch (err) {
+                console.error('Error fetching settings:', err);
+            }
+        }
+
+        settingsForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newValue = document.getElementById('setting-commission').value;
+
+            try {
+                const { error } = await _supabase
+                    .from('settings')
+                    .upsert({
+                        key: 'referral_commission',
+                        value: newValue,
+                        updated_at: new Date().toISOString()
+                    }, { onConflict: 'key' });
+
+                if (error) throw error;
+
+                alert('Settings updated successfully!');
+                closeSettings();
+            } catch (err) {
+                alert('Failed to update settings: ' + err.message);
+            }
+        });
+
+        // Business Modal Logic
+
+        // List of allowed Admin Emails (From Config)
+        const ADMIN_EMAILS = window.SUPABASE_CONFIG.adminEmails || [];
+
+        // Initialize
+        async function initAdmin() {
+            const { data: { session }, error } = await _supabase.auth.getSession();
+
+            if (session) {
+                // Client-side Admin Check
+                if (ADMIN_EMAILS.includes(session.user.email)) {
+                    showDashboard(session.user);
+                } else {
+                    showUnauthorized(session.user);
+                }
+            } else {
+                showLogin();
+            }
+        }
+
+        function showLogin() {
+            loginSection.classList.remove('hidden');
+            adminDashboard.classList.add('hidden');
+            document.getElementById('unauthorized-screen')?.remove();
+        }
+
+        function showUnauthorized(user) {
+            loginSection.classList.add('hidden');
+            adminDashboard.classList.add('hidden');
+
+            // Create Unauthorized Screen
+            const unauthorizedScreen = document.createElement('div');
+            unauthorizedScreen.id = 'unauthorized-screen';
+            unauthorizedScreen.className = 'flex items-center justify-center min-h-screen p-6 bg-slate-100';
+            unauthorizedScreen.innerHTML = `
+                <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md border border-slate-200 text-center">
+                    <span class="material-icons text-5xl text-yellow-500 mb-4">gpp_maybe</span>
+                    <h2 class="text-2xl font-bold text-slate-800 mb-2">Access Denied</h2>
+                    <p class="text-slate-600 mb-6 text-sm">
+                        You are logged in as <span class="font-mono bg-slate-100 p-1 rounded font-bold">${user.email}</span>, 
+                        but this meaningful account does not have Admin privileges.
+                    </p>
+                    <button onclick="adminSignOut()" class="w-full bg-slate-900 text-white py-3 rounded-lg font-bold hover:bg-slate-800 transition-all shadow-lg">
+                        Log Out & Switch Account
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(unauthorizedScreen);
+        }
+
+        function showDashboard(user) {
+            loginSection.classList.add('hidden');
+            adminDashboard.classList.remove('hidden');
+            document.getElementById('unauthorized-screen')?.remove();
+            document.getElementById('admin-email').textContent = user.email;
+            loadAllBookings();
+        }
+
+        // Login Logic
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const email = formData.get('email');
+            const password = formData.get('password');
+            const btn = e.target.querySelector('button');
+
+            btn.disabled = true;
+            btn.innerText = 'Signing In...';
+            loginError.classList.add('hidden');
+
+            try {
+                const { data, error } = await _supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+                if (error) throw error;
+
+                showDashboard(data.user);
+
+            } catch (err) {
+                console.error('Login Error:', err);
+                loginError.textContent = err.message || 'Invalid email or password.';
+                loginError.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Sign In';
+            }
+        });
+
+        async function adminSignOut() {
+            await _supabase.auth.signOut();
+            window.location.reload();
+        }
+
+        // Booking Management
+        async function loadAllBookings() {
+            bookingsContainer.innerHTML = '<div class="text-center py-12"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div><p class="mt-4 text-slate-500">Loading bookings...</p></div>';
+
+            try {
+                // Fetch bookings with business details and profiles
+                const { data, error } = await _supabase
+                    .from('bookings')
+                    .select(`
+                        *,
+                        businesses (name, phone, type, email, client_name, details),
+                        profiles:user_id (email, full_name, role)
+                    `)
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+                allBookings = data;
+                renderBookings();
+
+            } catch (err) {
+                console.error('Fetch Error:', err);
+                bookingsContainer.innerHTML = `
+                    <div class="text-center py-12 text-red-600 bg-red-50 rounded-xl border border-red-100 p-6">
+                        <span class="material-icons text-4xl mb-2">error_outline</span>
+                        <h3 class="text-lg font-bold">Failed to load bookings</h3>
+                        <p class="font-mono text-sm mt-2 bg-white p-2 rounded border border-red-200 inline-block text-left">
+                            ${err.message || 'Unknown error'}
+                        </p>
+                        ${err.details ? `<p class="text-xs text-slate-500 mt-2">${err.details}</p>` : ''}
+                        ${err.hint ? `<p class="text-xs text-slate-500 mt-1 italic">Hint: ${err.hint}</p>` : ''}
+                    </div>
+                `;
+            }
+        }
+
+        function filterBookings(status) {
+            currentFilter = status;
+
+            // Update UI tabs
+            document.querySelectorAll('#admin-dashboard nav button, #admin-dashboard .flex button').forEach(b => {
+                if (b.id.startsWith('filter-')) {
+                    b.classList.remove('bg-slate-100', 'text-slate-900');
+                    b.classList.add('text-slate-500');
+                    if (b.textContent === status) {
+                        b.classList.add('bg-slate-100', 'text-slate-900');
+                        b.classList.remove('text-slate-500');
+                    }
+                }
+            });
+
+            renderBookings();
+        }
+
+        function renderBookings() {
+            const filtered = currentFilter === 'All'
+                ? allBookings
+                : allBookings.filter(b => b.status === currentFilter);
+
+            if (filtered.length === 0) {
+                bookingsContainer.innerHTML = `
+                    <div class="text-center py-12 bg-white rounded-xl border border-slate-200">
+                        <span class="material-icons text-4xl text-slate-300 mb-2">inbox</span>
+                        <p class="text-slate-500">No ${currentFilter !== 'All' ? currentFilter.toLowerCase() : ''} bookings found.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            bookingsContainer.innerHTML = filtered.map((booking, index) => {
+                const businessName = booking.businesses?.name || booking.business_name || 'Unknown Business';
+                const userName = booking.profiles?.full_name || booking.profiles?.email || 'Unknown User';
+                // Prioritize Business Email, fallback to Profile Email
+                const contactEmail = booking.businesses?.email || booking.profiles?.email || 'No Email';
+                const contactPhone = booking.businesses?.phone || 'No Phone';
+                const clientName = booking.businesses?.client_name || 'N/A';
+                const isReferral = booking.businesses?.type === 'referrer';
+
+                const createdDate = new Date(booking.created_at).toLocaleDateString() + ' ' + new Date(booking.created_at).toLocaleTimeString();
+
+                // Format Services
+                let servicesList = '';
+                if (Array.isArray(booking.services)) {
+                    servicesList = booking.services.map(s => `<span class="inline-block bg-slate-100 text-slate-700 px-2 py-1 rounded text-xs font-medium mr-1 mb-1">${s}</span>`).join('');
+                } else {
+                    servicesList = `<span class="inline-block bg-slate-100 text-slate-700 px-2 py-1 rounded text-xs font-medium">${booking.service || 'General'}</span>`;
+                }
+
+                // Status Badge Color
+                let statusColor = 'bg-slate-100 text-slate-800';
+                if (booking.status === 'Pending') statusColor = 'bg-yellow-100 text-yellow-800';
+                if (booking.status === 'Accepted') statusColor = 'bg-blue-100 text-blue-800';
+                if (booking.status === 'Completed') statusColor = 'bg-green-100 text-green-800';
+                if (booking.status === 'Rejected') statusColor = 'bg-red-100 text-red-800';
+
+                // Action Buttons Logic
+                let actions = '';
+                if (booking.status === 'Pending') {
+                    actions = `
+                        <button onclick="openAcceptModal('${booking.id}')" class="px-3 py-1.5 bg-green-600 text-white text-sm font-bold rounded hover:bg-green-700 transition-colors shadow-sm">Accept</button>
+                        <button onclick="updateStatus('${booking.id}', 'Rejected')" class="px-3 py-1.5 bg-white border border-red-200 text-red-600 text-sm font-bold rounded hover:bg-red-50 transition-colors">Reject</button>
+                    `;
+                } else if (booking.status === 'Accepted') {
+                    actions = `
+                        <button onclick="updateStatus('${booking.id}', 'Completed')" class="px-3 py-1.5 bg-slate-800 text-white text-sm font-bold rounded hover:bg-slate-900 transition-colors shadow-sm flex items-center gap-1"><span class="material-icons text-sm">check</span> Mark Complete</button>
+                    `;
+                }
+
+                // Notes Logic (Truncate)
+                let notesHtml = '';
+                if (booking.notes) {
+                    const isLong = booking.notes.length > 60;
+                    const uniqueId = `notes-${booking.id}`;
+
+                    if (isLong) {
+                        notesHtml = `
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 mt-2 text-sm italic text-slate-700 relative group">
+                            <p class="font-bold text-xs text-slate-400 uppercase mb-1 not-italic">User Notes</p>
+                            <span id="${uniqueId}-short">${booking.notes.substring(0, 60)}...</span>
+                            <span id="${uniqueId}-full" class="hidden">${booking.notes}</span>
+                            <button onclick="document.getElementById('${uniqueId}-short').classList.toggle('hidden'); document.getElementById('${uniqueId}-full').classList.toggle('hidden'); this.innerText = this.innerText === 'Read More' ? 'Show Less' : 'Read More'" class="text-primary text-xs font-bold ml-1 hover:underline not-italic">Read More</button>
+                        </div>`;
+                    } else {
+                        notesHtml = `
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 mt-2 text-sm italic text-slate-700">
+                            <p class="font-bold text-xs text-slate-400 uppercase mb-1 not-italic">User Notes</p>
+                            "${booking.notes}"
+                        </div>`;
+                    }
+                }
+
+                return `
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col md:flex-row gap-6 hover:shadow-md transition-shadow">
+                    
+                    <!-- Details -->
+                    <div class="flex-1 space-y-3">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wide ${statusColor}">${booking.status}</span>
+                            ${isReferral ? `<span class="px-2 py-0.5 rounded-full text-xs font-bold bg-purple-100 text-purple-700 flex items-center gap-1 w-fit"><span class="material-icons text-[10px]">handshake</span> Referral</span>` : ''}
+                            <span class="text-xs text-slate-400 ml-auto md:ml-0">${createdDate}</span>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between items-start">
+                                <h3 class="font-bold text-lg text-slate-900">${businessName}</h3>
+                                <button onclick="openBusinessModal(${index})" class="text-xs font-medium text-primary hover:text-blue-800 underline">See Details</button>
+                            </div>
+                            <div class="text-sm text-slate-500 space-y-1 mt-1">
+                                <p><span class="font-semibold text-slate-700">Client:</span> ${clientName !== 'N/A' ? clientName : userName}</p>
+                                <p><span class="font-semibold text-slate-700">Phone:</span> ${contactPhone}</p>
+                                <p><span class="font-semibold text-slate-700">Email:</span> ${contactEmail}</p>
+                            </div>
+                        </div>
+
+                        <div class="pt-2">
+                           <p class="text-xs font-bold text-slate-400 uppercase mb-1">Services Requested</p>
+                           <div class="flex flex-wrap">${servicesList}</div>
+                        </div>
+
+                        ${notesHtml}
+
+                        ${booking.expected_completion_date ? `
+                        <div class="mt-2 flex items-center gap-2 text-sm font-medium text-blue-700 bg-blue-50 px-3 py-2 rounded-lg border border-blue-100 inline-block">
+                            <span class="material-icons text-blue-500 text-sm">event</span>
+                            Expected Completion: ${new Date(booking.expected_completion_date).toLocaleDateString()}
+                        </div>` : ''}
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex flex-row md:flex-col justify-start md:justify-center items-start md:items-end gap-3 min-w-[140px] border-t md:border-t-0 md:border-l border-slate-100 pt-4 md:pt-0 md:pl-6">
+                        ${actions}
+                    </div>
+
+                </div>
+                `;
+            }).join('');
+        }
+
+        // Action Handlers
+        function openAcceptModal(bookingId) {
+            document.getElementById('accept-booking-id').value = bookingId;
+            acceptModal.classList.remove('hidden');
+        }
+
+        function openBusinessModal(index) {
+            const booking = allBookings[index];
+            const biz = booking.businesses || {};
+
+            document.getElementById('biz-modal-name').textContent = biz.name || booking.business_name || '-';
+            document.getElementById('biz-modal-client').textContent = biz.client_name || booking.profiles?.full_name || '-';
+
+            const roleBadge = biz.type === 'referrer'
+                ? '<span class="inline-block bg-purple-100 text-purple-700 px-2 py-0.5 rounded text-xs font-bold">Referral Partner</span>'
+                : '<span class="inline-block bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-xs font-bold">Direct Client</span>';
+            document.getElementById('biz-modal-role').innerHTML = roleBadge;
+
+            document.getElementById('biz-modal-email').textContent = biz.email || booking.profiles?.email || '-';
+            document.getElementById('biz-modal-phone').textContent = biz.phone || '-';
+            document.getElementById('biz-modal-details').textContent = biz.details || 'No additional details provided.';
+
+            businessModal.classList.remove('hidden');
+        }
+
+        function closeBusinessModal() {
+            businessModal.classList.add('hidden');
+        }
+
+        function closeAcceptModal() {
+            acceptModal.classList.add('hidden');
+            acceptForm.reset();
+        }
+
+        acceptForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const bookingId = formData.get('booking_id');
+            const date = formData.get('completion_date');
+
+            await updateStatus(bookingId, 'Accepted', date);
+            closeAcceptModal();
+        });
+
+        async function updateStatus(bookingId, status, completionDate = null) {
+            // Optimistic UI updates could be added here, but reloading is safer for admin ops
+
+            // Build update object
+            const updates = { status: status };
+            if (completionDate) updates.expected_completion_date = completionDate;
+            if (status === 'Completed') updates.expected_completion_date = new Date().toISOString(); // Or keep original expectation? Let's just update status for now.
+
+            try {
+                const { error } = await _supabase
+                    .from('bookings')
+                    .update(updates)
+                    .eq('id', bookingId);
+
+                if (error) throw error;
+
+                // Reload data
+                await loadAllBookings();
+
+            } catch (err) {
+                console.error('Update Error:', err);
+                alert('Failed to update booking status: ' + err.message);
+            }
+        }
+
+        // Run
+        window.addEventListener('load', initAdmin);
+    </script>
+</body>
+
+</html>

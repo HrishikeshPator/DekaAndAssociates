@@ -174,15 +174,15 @@
                 <a class="hover:text-primary transition-colors" href="#about">Legacy</a>
                 <a class="hover:text-primary transition-colors" href="#contact">Contact</a>
             </div>
-            <a href="https://wa.me/919365828122" target="_blank"
+            <button onclick="handleBooking()"
                 class="bg-primary text-white px-5 py-2 rounded font-medium text-sm hover:opacity-90 transition-all flex items-center space-x-2">
                 <span>Book Consultation</span>
                 <span class="material-icons text-xs">event</span>
-            </a>
+            </button>
         </div>
     </nav>
 
-    <section class="relative min-h-screen flex items-center pt-20 bg-gradient-mesh">
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 bg-gradient-mesh overflow-hidden">
         <div class="absolute inset-0 z-0 opacity-40">
             <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[120px]"></div>
             <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent-purple/20 rounded-full blur-[120px]"></div>
@@ -210,10 +210,10 @@
                     Structured guidance for individuals, startups, NGOs, Companies and NRIs.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                    <a href="https://wa.me/919365828122" target="_blank"
+                    <button onclick="handleBooking()"
                         class="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-lg font-bold transition-all glow-effect text-center">
                         Book Startup Consultation
-                    </a>
+                    </button>
                     <a href="https://wa.me/919365828122" target="_blank"
                         class="glass px-8 py-4 rounded-lg font-bold border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all text-center">
                         Message Us
@@ -222,21 +222,21 @@
             </div>
             <div class="relative hidden md:block">
                 <div class="relative z-10 p-4">
-                    <img alt="3D Abstract Data Visualization" class="rounded-xl shadow-2xl border border-slate-200"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYkfqDSdnQkcpPajdBHrfx0eZrSl8obGD17Ypp9kM7mbhXIOvSr0eOhePFjkYN5bW8DHhDAuqK-8Asy71NJgKccI2A5b94xiYNsHkvlzAgW73UpLOXwd-vOn0xGTtsXpbGjqMhHtnChoZig_0uHo3AisZ-qgPOMqCZsIBwJDS-qlipiYu-u5TrJAlCHToXTnOusGLaA2uKV5eztYp01RQiojlAoszc04VWoO3Rt_WojmfVm5q9qBdyw38JoMFdSzCJ4WUf6Wz_1JwC" />
+                    <img alt="Strategic Financial Planning" class="rounded-xl shadow-2xl border border-slate-200"
+                        src="./hero_image.jpg" />
                     <div class="absolute -top-6 -right-6 glass-card p-4 rounded-xl shadow-xl w-48 text-center">
-                        <p class="text-[10px] uppercase text-slate-500 font-bold mb-1">Real-time Filing</p>
-                        <p class="text-2xl font-bold text-primary">99.9%</p>
-                        <p class="text-[10px] text-green-600 font-medium">Compliance Accuracy</p>
+                        <p class="text-[10px] uppercase text-slate-500 font-bold mb-1">Risk-Free Compliance</p>
+                        <p class="text-2xl font-bold text-primary">100%</p>
+                        <p class="text-[10px] text-green-600 font-medium">Zero-Error Audit Ready</p>
                     </div>
                     <div class="absolute -bottom-10 -left-10 glass-card p-4 rounded-xl shadow-xl w-56">
                         <div class="flex items-center space-x-3">
                             <div class="p-2 bg-accent-purple/20 rounded">
-                                <span class="material-icons text-accent-purple text-xl">cloud_done</span>
+                                <span class="material-icons text-accent-purple text-xl">insights</span>
                             </div>
                             <div>
-                                <p class="text-xs font-bold text-slate-800">Digital Transformation</p>
-                                <p class="text-[10px] text-slate-500">Tech-Enabled Compliance</p>
+                                <p class="text-xs font-bold text-slate-800">Smart Cloud Insights</p>
+                                <p class="text-[10px] text-slate-500">Data-driven Advice</p>
                             </div>
                         </div>
                     </div>
@@ -336,12 +336,12 @@
     <section id="new-entrepreneurs" class="py-24 relative overflow-hidden bg-primary/5">
         <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
             <!-- Left Column: Image/Vector -->
-            <div class="relative order-2 md:order-1">
+            <div class="relative order-2 md:order-1 hidden md:block">
                 <div
                     class="absolute inset-0 bg-gradient-to-tr from-primary/20 to-accent-purple/20 rounded-full blur-[100px] opacity-60">
                 </div>
-                <img src="new_entre.jpg" alt="Startup Planning"
-                    class="relative z-10 w-full max-w-md mx-auto rounded-2xl shadow-2xl border border-slate-200 hover:scale-105 transition-transform duration-500">
+                <img src="new_en.jpg" alt="Startup Planning"
+                    class="relative z-10 w-full max-w-xl mx-auto rounded-2xl shadow-2xl border border-slate-200 hover:scale-105 transition-transform duration-500">
             </div>
 
             <!-- Right Column: Content -->
@@ -417,11 +417,11 @@
 
                 <div class="pt-4 border-t border-slate-200">
                     <p class="text-slate-600 mb-6 italic">We provide structured consultation before you proceed.</p>
-                    <a href="https://wa.me/919365828122" target="_blank"
+                    <button onclick="handleBooking()"
                         class="inline-flex items-center space-x-2 bg-gradient-to-r from-primary to-accent-purple hover:opacity-90 text-white px-8 py-4 rounded-lg font-bold transition-all glow-effect">
                         <span>Book Startup Consultation</span>
                         <span class="material-icons">arrow_forward</span>
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -490,6 +490,7 @@
                             <li>• ROC Compliance</li>
                             <li>• LLP Compliance</li>
                             <li>• Accounting Compliance</li>
+                            <li>• TDS/TCS Returns</li>
                         </ul>
                     </div>
                     <button onclick="toggleService('more-taxation', this)"
@@ -632,13 +633,13 @@
                     <div
                         class="glass p-6 rounded-xl aspect-square flex flex-col justify-center items-center text-center">
                         <span class="material-icons text-primary text-4xl mb-4 opacity-80">history_edu</span>
-                        <span class="text-3xl font-bold text-primary">7+</span>
+                        <span class="text-3xl font-bold text-primary">9+</span>
                         <p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Years Experience</p>
                     </div>
                     <div
                         class="glass-card p-6 rounded-xl aspect-square flex flex-col justify-center items-center text-center">
                         <span class="material-icons text-accent-purple text-4xl mb-4 opacity-80">groups</span>
-                        <span class="text-3xl font-bold text-accent-purple">100+</span>
+                        <span class="text-3xl font-bold text-accent-purple">1000+</span>
                         <p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Digital Clients</p>
                     </div>
                 </div>
@@ -766,11 +767,11 @@
             <div class="text-center border-t border-slate-200 pt-12">
                 <p class="text-slate-700 text-lg mb-2">This session helps avoid future structural mistakes.</p>
                 <p class="text-slate-500 mb-8 italic">Consultation is structured and time-bound.</p>
-                <a href="https://wa.me/919365828122" target="_blank"
+                <button onclick="handleBooking()"
                     class="inline-flex items-center space-x-2 bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-lg font-bold transition-all glow-effect">
                     <span>Book Consultation</span>
                     <span class="material-icons">event</span>
-                </a>
+                </button>
             </div>
         </div>
     </section>
@@ -1012,11 +1013,11 @@
                     <div class="px-6 pb-6 text-slate-600 text-sm leading-relaxed">
                         <p>Schedule a consultation. Discuss your requirement clearly. Proceed after
                             understanding scope, timeline and fees.</p>
-                        <a href="https://wa.me/919365828122" target="_blank"
+                        <button onclick="handleBooking()"
                             class="inline-flex items-center space-x-2 mt-4 text-white bg-primary px-4 py-2 rounded text-xs font-bold uppercase tracking-wider hover:opacity-90 transition-opacity">
-                            <span>Book Now</span>
-                            <span class="material-icons text-sm">arrow_forward</span>
-                        </a>
+                            <span>Book Consultation</span>
+                            <span class="material-icons text-sm">event</span>
+                        </button>
                     </div>
                 </details>
             </div>
@@ -1071,9 +1072,16 @@
                         Associates</span>
                 </div>
                 <p class="text-slate-400 text-xs text-center md:text-left">© 2026 Deka & Associates. All
-                    rights reserved.<br />H. No 8, Akashi Path, Guwahati, Assam 781024.</p>
+                    rights reserved.</p>
             </div>
             <div class="flex space-x-12">
+                <div class="space-y-3">
+                    <h5 class="text-sm font-bold uppercase tracking-wider">Refer Program</h5>
+                    <ul class="text-xs text-slate-500 space-y-2">
+                        <li><button onclick="handleReferClient()"
+                                class="hover:text-white transition-colors text-left">Refer a Client</button></li>
+                    </ul>
+                </div>
                 <div class="space-y-3">
                     <h5 class="text-sm font-bold uppercase tracking-wider">Legal</h5>
                     <ul class="text-xs text-slate-500 space-y-2">
@@ -1088,6 +1096,26 @@
 
     <script src="js/config.js"></script>
     <script src="js/supabase.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/supabase.js"></script>
+    <script>
+        async function handleReferClient() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (session) {
+                window.location.href = 'dashboard.html?mode=refer';
+            } else {
+                // If auth.js is loaded, use openAuthModal. 
+                // We'll set a sessionStorage flag to redirect after login
+                sessionStorage.setItem('redirectAfterLogin', 'dashboard.html?mode=refer');
+                if (typeof openAuthModal === 'function') {
+                    openAuthModal();
+                } else {
+                    // Fallback if modal function isn't global yet (handled inside auth.js usually)
+                    document.getElementById('auth-modal').classList.remove('hidden');
+                }
+            }
+        }
+    </script>
 </body>
 
 </html>

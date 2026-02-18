@@ -53,5 +53,43 @@ async function submitContactForm(event) {
     }
 }
 
-// Expose to window for global access if needed, or attach event listeners here
+// Expose to window for global access
+window.supabaseClient = _supabase;
 window.submitContactForm = submitContactForm;
+
+// Google Auth Logic
+async function signInWithGoogle() {
+    try {
+        const { data, error } = await _supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: window.location.origin + '/dashboard.html'
+            }
+        });
+        if (error) throw error;
+    } catch (error) {
+        console.error('Error signing in with Google:', error.message);
+        alert('Error signing in: ' + error.message);
+    }
+}
+
+async function signOut() {
+    const { error } = await _supabase.auth.signOut();
+    if (error) console.error('Error signing out:', error.message);
+    window.location.href = '/index.html';
+}
+
+// Handle Booking Click
+async function handleBooking() {
+    const { data: { session } } = await _supabase.auth.getSession();
+    if (session) {
+        window.location.href = '/dashboard.html';
+    } else {
+        signInWithGoogle();
+    }
+}
+
+// Expose Auth functions
+window.signInWithGoogle = signInWithGoogle;
+window.signOut = signOut;
+window.handleBooking = handleBooking;

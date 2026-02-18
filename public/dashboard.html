@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Dashboard | Deka & Associates</title>
+    <link rel="icon" type="image/webp" href="./logo.webp">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1e40af",
+                        "background-light": "#f8fafc",
+                        "accent-purple": "#2563eb",
+                    },
+                    fontFamily: {
+                        "display": ["DM Sans", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-background-light font-display text-slate-900">
+
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <img src="./logo.webp" alt="Deka & Associates Logo" class="w-8 h-8 object-contain rounded">
+                <span class="text-lg font-bold tracking-tight">Deka <span class="text-primary">&</span>
+                    Associates</span>
+            </div>
+            <button onclick="signOut()" class="text-sm font-medium text-slate-600 hover:text-red-600 transition-colors">
+                Sign Out
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-6 py-12">
+
+        <!-- Loading State -->
+        <div id="loading" class="flex flex-col items-center justify-center py-20">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            <p class="mt-4 text-slate-500">Loading your dashboard...</p>
+        </div>
+
+        <!-- Add Business Section (New Onboarding) -->
+        <div id="add-business-section" class="hidden">
+            <div class="flex items-center justify-between mb-8">
+                <h1 class="text-3xl font-bold" id="add-business-title">Add Business Profile</h1>
+                <button onclick="showDashboard()" id="cancel-add-business"
+                    class="hidden text-sm text-slate-500 hover:text-slate-800 underline">Cancel</button>
+            </div>
+            <p class="text-slate-600 mb-8">Enter the details for the business you want to register or get services for.
+            </p>
+
+            <form id="business-form" class="bg-white p-8 rounded-xl shadow-sm border border-slate-200 space-y-6">
+
+                <!-- Role Selection -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-3">I am...</label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="role" value="client" class="peer sr-only" checked>
+                            <div
+                                class="p-4 rounded-lg border-2 border-slate-200 peer-checked:border-primary peer-checked:bg-primary/5 hover:border-primary/50 transition-all text-center">
+                                <span class="material-icons text-primary block mb-2">person</span>
+                                <span class="font-bold text-slate-800">The Client</span>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="role" value="referrer" class="peer sr-only">
+                            <div
+                                class="p-4 rounded-lg border-2 border-slate-200 peer-checked:border-primary peer-checked:bg-primary/5 hover:border-primary/50 transition-all text-center">
+                                <span class="material-icons text-accent-purple block mb-2">handshake</span>
+                                <span class="font-bold text-slate-800">Refer a Client</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Business Details -->
+                <div>
+                    <label id="label-business-name" class="block text-sm font-medium text-slate-700 mb-1">Business Name
+                        / Entity Name</label>
+                    <input type="text" name="business_name" required
+                        class="w-full rounded-lg border-slate-300 focus:border-primary focus:ring-primary"
+                        placeholder="e.g. My Startup Pvt Ltd">
+                </div>
+
+                <div>
+                    <label id="label-client-name" class="block text-sm font-medium text-slate-700 mb-1">Client
+                        Name</label>
+                    <input type="text" name="client_name" required
+                        class="w-full rounded-lg border-slate-300 focus:border-primary focus:ring-primary"
+                        placeholder="Name of the person handling the business">
+                </div>
+
+                <div>
+                    <label id="label-email" class="block text-sm font-medium text-slate-700 mb-1">Email Address</label>
+                    <input type="email" name="email" required
+                        class="w-full rounded-lg border-slate-300 focus:border-primary focus:ring-primary">
+                </div>
+
+                <div>
+                    <label id="label-phone" class="block text-sm font-medium text-slate-700 mb-1">Phone Number</label>
+                    <input type="tel" name="phone" required
+                        class="w-full rounded-lg border-slate-300 focus:border-primary focus:ring-primary">
+                </div>
+
+                <div>
+                    <label id="label-details" class="block text-sm font-medium text-slate-700 mb-1">Additional
+                        Details</label>
+                    <textarea name="details" rows="3"
+                        class="w-full rounded-lg border-slate-300 focus:border-primary focus:ring-primary"
+                        placeholder="Briefly describe the business type or industry..."></textarea>
+                </div>
+
+                <div id="referral-commission-msg"
+                    class="hidden text-center p-4 bg-purple-50 rounded-lg border border-purple-100 mb-4">
+                    <p class="text-purple-800 font-bold text-sm">
+                        <span class="material-icons text-base align-text-bottom mr-1">monetization_on</span>
+                        Earn <span id="commission-rate-display">10%</span> Commission on every successful referral!
+                    </p>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-primary text-white py-3 rounded-lg font-bold hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl">
+                    Save Profile & Continue
+                </button>
+            </form>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard-section" class="hidden space-y-8">
+            <div class="flex justify-between items-end">
+                <div>
+                    <h1 class="text-3xl font-bold">Dashboard</h1>
+                    <p class="text-slate-600">Manage your business profiles and bookings.</p>
+                </div>
+                <button onclick="openBookingModal()"
+                    class="bg-primary text-white px-6 py-3 rounded-lg font-bold hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl flex items-center gap-2">
+                    <span class="material-icons">add</span> Book a Service
+                </button>
+            </div>
+
+            <!-- Active Bookings -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="px-6 py-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
+                    <h3 class="font-bold text-slate-800">Your Bookings</h3>
+                    <button onclick="loadBookings()"
+                        class="text-primary text-sm font-medium hover:underline">Refresh</button>
+                </div>
+                <div id="bookings-list" class="divide-y divide-slate-100">
+                    <!-- Dynamic Content -->
+                    <div class="p-8 text-center text-slate-500">
+                        <span class="material-icons text-4xl mb-2 opacity-50">toc</span>
+                        <p>No active bookings found.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="booking-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeBookingModal()"></div>
+        <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-xl bg-white rounded-2xl shadow-2xl p-6 md:p-8 animate-fade-in-up max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Book a Service</h2>
+                <button onclick="closeBookingModal()" class="text-slate-400 hover:text-slate-600">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+
+            <form id="booking-form" class="space-y-6">
+                <!-- Step 1: Select Business -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Select Business Profile</label>
+                    <select id="business-select" name="business_id" required onchange="handleBusinessChange(this)"
+                        class="w-full rounded-lg border-slate-300 focus:border-primary focus:ring-primary">
+                        <option value="">Loading businesses...</option>
+                    </select>
+                    <p class="text-xs text-slate-500 mt-1">Select the business you are booking for.</p>
+                </div>
+
+                <!-- Step 2: Multi-Select Services -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-3">Select Service Category</label>
+                    <div class="max-h-[60vh] overflow-y-auto pr-2 space-y-3">
+
+                        <!-- 1. Business Registration -->
+                        <label
+                            class="flex items-start space-x-3 p-4 border rounded-xl hover:bg-slate-50 hover:border-primary/30 cursor-pointer transition-all">
+                            <input type="checkbox" name="services" value="Business Registration"
+                                class="mt-1 rounded border-slate-300 text-primary focus:ring-primary w-5 h-5">
+                            <div class="flex-1">
+                                <span class="font-bold text-slate-800 block mb-1">Business Registration</span>
+                                <p class="text-xs text-slate-500 leading-relaxed">
+                                    Proprietorship, Private Limited Company, LLP Registration, Society / Trust / NGO
+                                    (Assam), Co-Operative Society, GST Registration, Import Export Code (IEC), MSME
+                                    Registration, Trade License (Assam), FSSAI, ISO, GEM, PAN / TAN, Digital Signature
+                                    (DSC)
+                                </p>
+                            </div>
+                        </label>
+
+                        <!-- 2. Taxation & Compliance -->
+                        <label
+                            class="flex items-start space-x-3 p-4 border rounded-xl hover:bg-slate-50 hover:border-primary/30 cursor-pointer transition-all">
+                            <input type="checkbox" name="services" value="Taxation & Compliance"
+                                class="mt-1 rounded border-slate-300 text-primary focus:ring-primary w-5 h-5">
+                            <div class="flex-1">
+                                <span class="font-bold text-slate-800 block mb-1">Taxation & Compliance</span>
+                                <p class="text-xs text-slate-500 leading-relaxed">
+                                    Income Tax Return Filing, Income Tax Audit, GST Returns, GST Notices, Income Tax
+                                    Notices, ROC Compliance, LLP Compliance, Accounting Compliance
+                                </p>
+                            </div>
+                        </label>
+
+                        <!-- 3. Project & Financial Reports -->
+                        <label
+                            class="flex items-start space-x-3 p-4 border rounded-xl hover:bg-slate-50 hover:border-primary/30 cursor-pointer transition-all">
+                            <input type="checkbox" name="services" value="Project & Financial Reports"
+                                class="mt-1 rounded border-slate-300 text-primary focus:ring-primary w-5 h-5">
+                            <div class="flex-1">
+                                <span class="font-bold text-slate-800 block mb-1">Project & Financial Reports</span>
+                                <p class="text-xs text-slate-500 leading-relaxed">
+                                    Detailed Project Report, CMA Report, NGO Project Report, Financial Projections
+                                </p>
+                            </div>
+                        </label>
+
+                        <!-- 4. Labour Law Compliance -->
+                        <label
+                            class="flex items-start space-x-3 p-4 border rounded-xl hover:bg-slate-50 hover:border-primary/30 cursor-pointer transition-all">
+                            <input type="checkbox" name="services" value="Labour Law Compliance"
+                                class="mt-1 rounded border-slate-300 text-primary focus:ring-primary w-5 h-5">
+                            <div class="flex-1">
+                                <span class="font-bold text-slate-800 block mb-1">Labour Law Compliance</span>
+                                <p class="text-xs text-slate-500 leading-relaxed">
+                                    EPF Registration, ESIC Registration, EPF & ESIC Returns, EPF Withdrawal / Refund
+                                </p>
+                            </div>
+                        </label>
+
+                        <!-- 5. Legal & Documentation -->
+                        <label
+                            class="flex items-start space-x-3 p-4 border rounded-xl hover:bg-slate-50 hover:border-primary/30 cursor-pointer transition-all">
+                            <input type="checkbox" name="services" value="Legal & Documentation"
+                                class="mt-1 rounded border-slate-300 text-primary focus:ring-primary w-5 h-5">
+                            <div class="flex-1">
+                                <span class="font-bold text-slate-800 block mb-1">Legal & Documentation</span>
+                                <p class="text-xs text-slate-500 leading-relaxed">
+                                    Trademark Registration, Business Agreements, 12A / 80G Registration
+                                </p>
+                            </div>
+                        </label>
+
+                        <!-- 6. Business Consulting -->
+                        <label
+                            class="flex items-start space-x-3 p-4 border rounded-xl hover:bg-slate-50 hover:border-primary/30 cursor-pointer transition-all">
+                            <input type="checkbox" name="services" value="Business Consulting"
+                                class="mt-1 rounded border-slate-300 text-primary focus:ring-primary w-5 h-5">
+                            <div class="flex-1">
+                                <span class="font-bold text-slate-800 block mb-1">Business Consulting</span>
+                                <p class="text-xs text-slate-500 leading-relaxed">
+                                    Structured guidance: Business structuring advice, Tax planning, Cash flow planning,
+                                    Compliance system setup, Risk identification, Loan preparation support
+                                </p>
+                            </div>
+                        </label>
+
+                        <!-- 7. Legal Documentation & Regulatory Support -->
+                        <label
+                            class="flex items-start space-x-3 p-4 border rounded-xl hover:bg-slate-50 hover:border-primary/30 cursor-pointer transition-all">
+                            <input type="checkbox" name="services" value="Legal Documentation & Regulatory Support"
+                                class="mt-1 rounded border-slate-300 text-primary focus:ring-primary w-5 h-5">
+                            <div class="flex-1">
+                                <span class="font-bold text-slate-800 block mb-1">Legal Documentation & Regulatory
+                                    Support</span>
+                                <p class="text-xs text-slate-500 leading-relaxed">
+                                    Partnership Deed Drafting, LLP Agreement Drafting, Shareholders Agreement, Founders
+                                    Agreement, Employment Agreements, Vendor / Service Agreements, NDA, MOU, Legal
+                                    Notice Drafting, Contract Review & Compliance Check
+                                </p>
+                            </div>
+                        </label>
+
+                    </div>
+                </div>
+
+                <!-- Message -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Message / Requirements</label>
+                    <textarea name="notes" rows="3" required
+                        class="w-full rounded-lg border-slate-300 focus:border-primary focus:ring-primary"
+                        placeholder="Please describe your specific requirements..."></textarea>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-primary text-white py-3 rounded-lg font-bold hover:bg-primary/90 transition-all">
+                    Confirm Booking
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/supabase.js"></script>
+    <script>
+        // DOM Elements
+        const loadingDiv = document.getElementById('loading');
+        const addBusinessSection = document.getElementById('add-business-section');
+        const dashboardSection = document.getElementById('dashboard-section');
+        const bookingsList = document.getElementById('bookings-list');
+        const modal = document.getElementById('booking-modal');
+        const businessSelect = document.getElementById('business-select');
+        const cancelAddBusinessBtn = document.getElementById('cancel-add-business');
+
+        let currentUser = null;
+        let userBusinesses = [];
+
+        // Dynamic Label Logic
+        const roleRadios = document.querySelectorAll('input[name="role"]');
+        roleRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const isReferrer = e.target.value === 'referrer';
+                document.getElementById('label-business-name').textContent = isReferrer ? "Client's Business Name / Entity Name" : "Business Name / Entity Name";
+                document.getElementById('label-client-name').textContent = isReferrer ? "Client's Name" : "Client Name";
+                document.getElementById('label-email').textContent = isReferrer ? "Client's Email Address" : "Email Address";
+                document.getElementById('label-phone').textContent = isReferrer ? "Client's Phone Number" : "Phone Number";
+                document.getElementById('label-details').textContent = isReferrer ? "Client's Business Details" : "Additional Details";
+
+                // Toggle Commission Message
+                const msg = document.getElementById('referral-commission-msg');
+                if (isReferrer) {
+                    msg.classList.remove('hidden');
+                } else {
+                    msg.classList.add('hidden');
+                }
+            });
+        });
+
+        // Fetch System Settings
+        async function fetchReferralCommission() {
+            try {
+                const { data, error } = await _supabase
+                    .from('settings')
+                    .select('value')
+                    .eq('key', 'referral_commission')
+                    .single();
+
+                if (data && data.value) {
+                    const display = document.getElementById('commission-rate-display');
+                    if (display) display.textContent = `${data.value}%`;
+                }
+            } catch (err) {
+                console.warn('Failed to fetch commission setting:', err);
+            }
+        }
+
+        // Initialize
+        async function initDashboard() {
+            try {
+                // Fetch Settings first
+                fetchReferralCommission();
+
+                // Check Session
+                const { data: { session }, error } = await _supabase.auth.getSession();
+                if (error || !session) {
+                    window.location.href = '/index.html';
+                    return;
+                }
+
+                currentUser = session.user;
+                await loadBusinesses();
+
+                loadingDiv.classList.add('hidden');
+
+                if (userBusinesses.length === 0) {
+                    // Show Add Business (Onboarding)
+                    showAddBusiness(false);
+                } else {
+                    // Check for Refer Mode
+                    const urlParams = new URLSearchParams(window.location.search);
+                    if (urlParams.get('mode') === 'refer') {
+                        // Clear Mode from URL
+                        window.history.replaceState({}, document.title, window.location.pathname);
+
+                        showAddBusiness(true);
+
+                        // Select "Refer a Client" & Trigger Change
+                        const referRadio = document.querySelector('input[value="referrer"]');
+                        if (referRadio) {
+                            referRadio.click();
+                            // click() triggers change event automatically in most browsers, 
+                            // but dispatching manually ensures our listener runs
+                            referRadio.dispatchEvent(new Event('change'));
+                        }
+                    } else {
+                        // Show Dashboard
+                        showDashboard();
+                        loadBookings();
+                    }
+                }
+
+            } catch (err) {
+                console.error('Dashboard Init Error:', err);
+                alert('An error occurred. Please try reloading.');
+            }
+        }
+
+        async function loadBusinesses() {
+            const { data, error } = await _supabase
+                .from('businesses')
+                .select('*')
+                .eq('user_id', currentUser.id)
+                .order('created_at', { ascending: false });
+
+            if (!error && data) {
+                userBusinesses = data;
+            } else {
+                // Fallback to empty array if table doesn't exist yet or error
+                console.warn('Could not load businesses or table missing', error);
+                userBusinesses = [];
+            }
+        }
+
+        // View Transitions
+        function showAddBusiness(allowCancel = true) {
+            dashboardSection.classList.add('hidden');
+            addBusinessSection.classList.remove('hidden');
+            if (allowCancel) {
+                cancelAddBusinessBtn.classList.remove('hidden');
+            } else {
+                cancelAddBusinessBtn.classList.add('hidden');
+            }
+        }
+
+        function showDashboard() {
+            addBusinessSection.classList.add('hidden');
+            dashboardSection.classList.remove('hidden');
+        }
+
+        // Add Business Form Submit
+        document.getElementById('business-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+
+            submitBtn.innerText = 'Saving...';
+            submitBtn.disabled = true;
+
+            try {
+                const { data: newBusiness, error } = await _supabase
+                    .from('businesses')
+                    .insert([{
+                        user_id: currentUser.id,
+                        name: data.business_name,
+                        client_name: data.client_name, // Added client_name
+                        type: data.role,
+                        email: data.email,
+                        phone: data.phone,
+                        details: data.details,
+                        created_at: new Date().toISOString()
+                    }])
+                    .select()
+                    .single();
+
+                if (error) throw error;
+
+                // Refresh businesses list
+                await loadBusinesses();
+
+                // Switch to Dashboard
+                showDashboard();
+
+                // Immediately open booking modal with new business selected
+                openBookingModal(newBusiness.id);
+
+                e.target.reset();
+
+            } catch (err) {
+                console.error('Add Business Error:', err);
+                alert('Failed to save business profile. Please try again.');
+            } finally {
+                submitBtn.innerText = 'Save Profile & Continue';
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Booking Form Submit
+        document.getElementById('booking-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+
+            // Get Multiple Services
+            const selectedServices = [];
+            document.querySelectorAll('input[name="services"]:checked').forEach((checkbox) => {
+                selectedServices.push(checkbox.value);
+            });
+
+            if (selectedServices.length === 0) {
+                alert('Please select at least one service.');
+                return;
+            }
+
+            const businessId = formData.get('business_id');
+            const notes = formData.get('notes');
+
+            // Find business name for easier display/reference (optional)
+            const business = userBusinesses.find(b => b.id === businessId);
+            const businessName = business ? business.name : 'Unknown';
+
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Processing...';
+
+            try {
+                const { error } = await _supabase.from('bookings').insert([{
+                    user_id: currentUser.id,
+                    business_id: businessId, // Link to business profile
+                    business_name: businessName, // Denormalized for easier query/display if joined query fails
+                    services: selectedServices, // Store array
+                    status: 'Pending',
+                    notes: notes,
+                    created_at: new Date().toISOString()
+                }]);
+
+                if (error) throw error;
+
+                closeBookingModal();
+                e.target.reset();
+                alert('Booking created successfully!');
+                loadBookings();
+
+            } catch (err) {
+                console.error('Booking Error:', err);
+                alert('Failed to create booking: ' + err.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Confirm Booking';
+            }
+        });
+
+        // Load Bookings
+        async function loadBookings() {
+            bookingsList.innerHTML = '<div class="p-8 text-center text-slate-500">Loading bookings...</div>';
+
+            try {
+                const { data, error } = await _supabase
+                    .from('bookings')
+                    .select(`
+                        *,
+                        businesses (name, type, client_name)
+                    `)
+                    .eq('user_id', currentUser.id)
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (data.length === 0) {
+                    bookingsList.innerHTML = `
+                        <div class="p-8 text-center text-slate-500">
+                            <span class="material-icons text-4xl mb-2 opacity-50">event_busy</span>
+                            <p>No active bookings found.</p>
+                            <button onclick="openBookingModal()" class="mt-4 text-primary font-bold hover:underline">Book your first service</button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                bookingsList.innerHTML = data.map(booking => {
+                    // Handle old single-service data vs new array
+                    const serviceDisplay = Array.isArray(booking.services)
+                        ? booking.services.join(', ')
+                        : booking.service || 'General Service';
+
+                    const businessName = booking.businesses?.name || booking.business_name || 'Business Profile';
+                    const isReferral = booking.businesses?.type === 'referrer';
+
+                    // Status Colors & Layout
+                    let statusColor = 'bg-slate-100 text-slate-800';
+                    if (booking.status === 'Pending') statusColor = 'bg-yellow-100 text-yellow-800';
+                    if (booking.status === 'Accepted' || booking.status === 'Confirmed') statusColor = 'bg-green-100 text-green-800';
+                    if (booking.status === 'Completed') statusColor = 'bg-blue-100 text-blue-800';
+                    if (booking.status === 'Rejected') statusColor = 'bg-red-100 text-red-800';
+
+                    return `
+                    <div class="p-6 flex flex-col md:flex-row items-start md:items-center justify-between hover:bg-slate-50 transition-colors gap-4">
+                        <div class="flex-1 w-full">
+                            <div class="flex flex-wrap items-center gap-2 mb-2">
+                                <span class="inline-block px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide rounded-full ${statusColor}">
+                                    ${booking.status}
+                                </span>
+                                <span class="text-xs text-slate-400 font-medium px-2 py-0.5 bg-slate-100 rounded-full border border-slate-200">
+                                    ${businessName}
+                                </span>
+                                ${isReferral ? `<span class="text-xs text-white font-bold px-2 py-0.5 bg-purple-600 rounded-full flex items-center gap-1">
+                                    <span class="material-icons text-[10px]">handshake</span> Referral
+                                </span>` : ''}
+                            </div>
+                            <h4 class="font-bold text-slate-900 text-lg md:text-base">${serviceDisplay}</h4>
+                            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1 text-sm text-slate-500">
+                                <span>Applied: ${new Date(booking.created_at).toLocaleDateString()}</span>
+                                
+                                ${(booking.status === 'Accepted' || booking.status === 'Confirmed') && booking.expected_completion_date ? `
+                                <span class="text-green-600 font-bold flex items-center gap-1 bg-green-50 px-2 py-0.5 rounded border border-green-100">
+                                    <span class="material-icons text-sm">event</span> Expected: ${new Date(booking.expected_completion_date).toLocaleDateString()}
+                                </span>` : ''}
+
+                            </div>
+                        </div>
+                        <div class="text-right hidden md:block">
+                            <span class="material-icons text-slate-300">chevron_right</span>
+                        </div>
+                    </div>
+                `}).join('');
+
+            } catch (err) {
+                console.error('Load Bookings Error:', err);
+                bookingsList.innerHTML = '<div class="p-8 text-center text-red-500">Failed to load bookings. Ensure database tables are created.</div>';
+            }
+        }
+
+        // Modal Logic
+        function openBookingModal(preselectedBusinessId = null) {
+            // Populate Business Select
+            businessSelect.innerHTML = '<option value="">Select a Business...</option>';
+
+            userBusinesses.forEach(biz => {
+                const option = document.createElement('option');
+                option.value = biz.id;
+                option.textContent = biz.name;
+                if (preselectedBusinessId && biz.id == preselectedBusinessId) {
+                    option.selected = true;
+                }
+                businessSelect.appendChild(option);
+            });
+
+            // Add "Add New Business" Option
+            const addOption = document.createElement('option');
+            addOption.value = "ADD_NEW";
+            addOption.textContent = "+ Add New Business Profile";
+            addOption.className = "font-bold text-primary";
+            businessSelect.appendChild(addOption);
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeBookingModal() {
+            modal.classList.add('hidden');
+        }
+
+        function handleBusinessChange(select) {
+            if (select.value === 'ADD_NEW') {
+                closeBookingModal();
+                showAddBusiness(true); // Allow cancel to go back to dashboard
+                // Reset select for next time
+                select.value = "";
+            }
+        }
+
+        // Run Init
+        window.addEventListener('load', initDashboard);
+    </script>
+</body>
+
+</html>

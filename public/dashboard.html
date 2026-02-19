@@ -373,6 +373,41 @@
             }
         }
 
+        // Ensure Profile Exists (Fix for Foreign Key Error)
+        async function ensureProfileExists() {
+            try {
+                // Check if profile exists
+                const { data, error } = await _supabase
+                    .from('profiles')
+                    .select('id')
+                    .eq('id', currentUser.id)
+                    .single();
+
+                if (!data || error) {
+                    console.log('Profile missing. Creating one now...');
+                    // Create profile
+                    const { error: insertError } = await _supabase
+                        .from('profiles')
+                        .insert([
+                            {
+                                id: currentUser.id,
+                                email: currentUser.email,
+                                full_name: currentUser.user_metadata?.full_name || currentUser.email.split('@')[0]
+                                // Removed updated_at to avoid schema cache issues
+                            }
+                        ]);
+
+                    if (insertError) {
+                        console.error('Failed to auto-create profile:', insertError);
+                    } else {
+                        console.log('Profile created successfully.');
+                    }
+                }
+            } catch (err) {
+                console.warn('Profile check failed:', err);
+            }
+        }
+
         // Initialize
         async function initDashboard() {
             try {
@@ -387,6 +422,16 @@
                 }
 
                 currentUser = session.user;
+
+                // Fix: Ensure profile exists before proceeding
+                await ensureProfileExists();
+
+                // Pre-fill email address
+                const emailInput = document.querySelector('input[name="email"]');
+                if (emailInput && currentUser.email) {
+                    emailInput.value = currentUser.email;
+                }
+
                 await loadBusinesses();
 
                 loadingDiv.classList.add('hidden');

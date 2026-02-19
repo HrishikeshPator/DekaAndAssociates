@@ -309,18 +309,26 @@
 
         // Business Modal Logic
 
-        // List of allowed Admin Emails (From Config)
-        const ADMIN_EMAILS = window.SUPABASE_CONFIG.adminEmails || [];
-
         // Initialize
         async function initAdmin() {
             const { data: { session }, error } = await _supabase.auth.getSession();
 
             if (session) {
-                // Client-side Admin Check
-                if (ADMIN_EMAILS.includes(session.user.email)) {
-                    showDashboard(session.user);
-                } else {
+                // Secure Admin Check via Database (RLS Policy)
+                try {
+                    const { data, error } = await _supabase
+                        .from('admins')
+                        .select('email')
+                        .eq('email', session.user.email)
+                        .single();
+
+                    if (data && !error) {
+                        showDashboard(session.user);
+                    } else {
+                        showUnauthorized(session.user);
+                    }
+                } catch (err) {
+                    console.error('Admin verification failed:', err);
                     showUnauthorized(session.user);
                 }
             } else {

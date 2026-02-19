@@ -69,4 +69,5 @@ node_modules/
 .dataconnect
 
 # Supabase Configuration
-
+public/js/config.js
+sql/

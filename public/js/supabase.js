@@ -2,10 +2,14 @@
 // Keys are loaded from config.js
 if (!window.SUPABASE_CONFIG) {
     console.error('Supabase Config not found. Please create public/js/config.js');
+    alert('System Error: Configuration missing. Please refresh the page.');
 }
-const supabaseUrl = window.SUPABASE_CONFIG.url;
-const supabaseKey = window.SUPABASE_CONFIG.key;
-const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+let _supabase = null;
+if (window.SUPABASE_CONFIG) {
+    const supabaseUrl = window.SUPABASE_CONFIG.url;
+    const supabaseKey = window.SUPABASE_CONFIG.key;
+    _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+}
 
 // Function to handle Contact Form Submission
 async function submitContactForm(event) {
@@ -81,6 +85,10 @@ async function signOut() {
 
 // Handle Booking Click
 async function handleBooking() {
+    if (!_supabase) {
+        alert('System Error: Database connection not initialized. Please refresh.');
+        return;
+    }
     const { data: { session } } = await _supabase.auth.getSession();
     if (session) {
         window.location.href = '/dashboard.html';

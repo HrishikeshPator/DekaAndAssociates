@@ -1,0 +1,15 @@
+{
+  "short_name": "Deka & Associates",
+  "name": "Deka and Associates",
+  "icons": [
+    {
+      "src": "logo.webp",
+      "sizes": "192x192 512x512",
+      "type": "image/webp"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#1e40af",
+  "background_color": "#ffffff"
+}

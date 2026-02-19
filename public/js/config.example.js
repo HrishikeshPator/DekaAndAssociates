@@ -3,5 +3,4 @@
 window.SUPABASE_CONFIG = {
     url: 'YOUR_SUPABASE_PROJECT_URL',
     key: 'YOUR_SUPABASE_ANON_KEY',
-    adminEmails: ['admin@example.com']
 };

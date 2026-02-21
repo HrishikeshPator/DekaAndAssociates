@@ -6,11 +6,17 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Admin Panel | Deka & Associates</title>
     <link rel="icon" type="image/webp" href="./logo.webp">
+    <link rel="manifest" href="./admin.manifest.json">
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
         rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <script id="tailwind-config">
         tailwind.config = {
@@ -75,38 +81,60 @@
                     <span class="text-lg font-bold tracking-tight">Admin <span
                             class="text-slate-400">Panel</span></span>
                 </div>
-                <div class="flex items-center gap-4">
-                    <span id="admin-email" class="text-sm font-medium text-slate-500 hidden md:inline"></span>
-                    <button onclick="adminSignOut()"
-                        class="text-sm font-medium text-red-600 hover:text-red-800 transition-colors bg-red-50 px-3 py-1.5 rounded-lg border border-red-100">
-                        Sign Out
+                <div class="flex items-center gap-2 sm:gap-4 overflow-x-auto pb-1 sm:pb-0 hide-scrollbar">
+                    <button id="install-app-btn" onclick="installApp()"
+                        class="hidden shrink-0 text-sm font-medium text-slate-600 hover:text-primary transition-colors bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-100 flex items-center gap-1">
+                        <span class="material-icons text-sm">install_mobile</span> Install App
                     </button>
+                    <button id="enable-notifications-btn" onclick="requestNotificationPermission()"
+                        class="hidden shrink-0 text-sm font-medium text-slate-600 hover:text-green-700 transition-colors bg-green-50 px-3 py-1.5 rounded-lg border border-green-100 flex items-center gap-1">
+                        <span class="material-icons text-sm">notifications</span> Enable Alerts
+                    </button>
+                    <span id="admin-email" class="shrink-0 text-sm font-medium text-slate-500 hidden md:inline"></span>
                     <button onclick="openSettings()"
-                        class="text-sm font-medium text-slate-600 hover:text-slate-800 transition-colors bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100 flex items-center gap-1">
+                        class="shrink-0 text-sm font-medium text-slate-600 hover:text-slate-800 transition-colors bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100 flex items-center gap-1">
                         <span class="material-icons text-sm">settings</span> Settings
                     </button>
                 </div>
             </div>
         </nav>
 
+        <style>
+            /* Hide scrollbar for the navbar actions on mobile */
+            .hide-scrollbar::-webkit-scrollbar {
+                display: none;
+            }
+
+            .hide-scrollbar {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+        </style>
+
         <div class="max-w-7xl mx-auto px-6 py-8">
 
-            <!-- Filters -->
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            <!-- Header & Actions -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                 <h2 class="text-2xl font-bold text-slate-800">Manage Bookings</h2>
+                <button onclick="exportToExcel()"
+                    class="px-4 py-2 bg-green-600 text-white text-sm font-bold rounded-lg hover:bg-green-700 transition-colors shadow-sm flex items-center gap-2 border border-green-700">
+                    <span class="material-icons text-sm">download</span> Export to Excel
+                </button>
+            </div>
 
-                <div class="flex bg-white p-1 rounded-lg border border-slate-200 shadow-sm overflow-x-auto">
-                    <button onclick="filterBookings('All')" id="filter-all"
-                        class="px-4 py-2 text-sm font-medium rounded-md bg-slate-100 text-slate-900 transition-colors whitespace-nowrap">All</button>
-                    <button onclick="filterBookings('Pending')" id="filter-pending"
-                        class="px-4 py-2 text-sm font-medium rounded-md text-slate-500 hover:text-slate-900 transition-colors whitespace-nowrap">Pending</button>
-                    <button onclick="filterBookings('Accepted')" id="filter-accepted"
-                        class="px-4 py-2 text-sm font-medium rounded-md text-slate-500 hover:text-slate-900 transition-colors whitespace-nowrap">Accepted</button>
-                    <button onclick="filterBookings('Completed')" id="filter-completed"
-                        class="px-4 py-2 text-sm font-medium rounded-md text-slate-500 hover:text-slate-900 transition-colors whitespace-nowrap">Completed</button>
-                    <button onclick="filterBookings('Rejected')" id="filter-rejected"
-                        class="px-4 py-2 text-sm font-medium rounded-md text-slate-500 hover:text-slate-900 transition-colors whitespace-nowrap">Rejected</button>
-                </div>
+            <!-- Filters -->
+            <div
+                class="flex bg-white p-1 rounded-lg border border-slate-200 shadow-sm overflow-x-auto mb-8 w-fit flex-nowrap">
+                <button onclick="filterBookings('All')" id="filter-all"
+                    class="px-4 py-2 text-sm font-medium rounded-md bg-slate-100 text-slate-900 transition-colors whitespace-nowrap">All</button>
+                <button onclick="filterBookings('Pending')" id="filter-pending"
+                    class="px-4 py-2 text-sm font-medium rounded-md text-slate-500 hover:text-slate-900 transition-colors whitespace-nowrap">Pending</button>
+                <button onclick="filterBookings('Accepted')" id="filter-accepted"
+                    class="px-4 py-2 text-sm font-medium rounded-md text-slate-500 hover:text-slate-900 transition-colors whitespace-nowrap">Accepted</button>
+                <button onclick="filterBookings('Completed')" id="filter-completed"
+                    class="px-4 py-2 text-sm font-medium rounded-md text-slate-500 hover:text-slate-900 transition-colors whitespace-nowrap">Completed</button>
+                <button onclick="filterBookings('Rejected')" id="filter-rejected"
+                    class="px-4 py-2 text-sm font-medium rounded-md text-slate-500 hover:text-slate-900 transition-colors whitespace-nowrap">Rejected</button>
             </div>
 
             <!-- Bookings List -->
@@ -173,7 +201,8 @@
         <div
             class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-2xl shadow-2xl p-6 md:p-8 animate-fade-in-up">
             <h3 class="text-xl font-bold mb-4">Accept Booking</h3>
-            <p class="text-slate-600 mb-6 text-sm">Set an expected completion date for this service. The client will be
+            <p class="text-slate-600 mb-6 text-sm">Set an expected completion date for this service. The client will
+                be
                 notified.</p>
 
             <form id="accept-form" class="space-y-4">
@@ -222,10 +251,41 @@
                         Changes</button>
                 </div>
             </form>
+
+            <div class="mt-8 pt-6 border-t border-slate-200">
+                <button onclick="adminSignOut()"
+                    class="w-full px-4 py-2 bg-red-50 text-red-600 border border-red-100 rounded-lg font-bold hover:bg-red-100 transition-colors flex items-center justify-center gap-2">
+                    <span class="material-icons text-sm">logout</span> Sign Out of Admin Panel
+                </button>
+            </div>
         </div>
     </div>
 
     <script src="js/config.js"></script>
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAAhyUKq3FjiUYJnYxXKWwnYLcoNGO1zaY",
+            authDomain: "dekaandassociatesghy.firebaseapp.com",
+            projectId: "dekaandassociatesghy",
+            storageBucket: "dekaandassociatesghy.firebasestorage.app",
+            messagingSenderId: "939359139918",
+            appId: "1:939359139918:web:e23e316fa07ec44d2e6b1f",
+            measurementId: "G-PD9SYHMDKK"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        let messaging;
+        try {
+            if (firebase.messaging.isSupported()) {
+                messaging = firebase.messaging();
+            } else {
+                console.warn('Firebase Messaging is not supported in this browser.');
+            }
+        } catch (e) {
+            console.warn('Failed to initialize Firebase Messaging:', e);
+        }
+    </script>
     <!-- REMOVED shared js/supabase.js to avoid session conflict -->
     <script>
         // Initialize Unique Supabase Client for Admin (Isolated Session)
@@ -371,8 +431,132 @@
             adminDashboard.classList.remove('hidden');
             document.getElementById('unauthorized-screen')?.remove();
             document.getElementById('admin-email').textContent = user.email;
+
+            // Notification logic (Temporarily disabled until backend keys are configured)
+            /*
+            if ('Notification' in window) {
+                if (Notification.permission === 'default') {
+                    document.getElementById('enable-notifications-btn').classList.remove('hidden');
+                } else if (Notification.permission === 'granted') {
+                    // Make sure token is synced on login
+                    requestNotificationPermission(); 
+                }
+            }
+            */
+
             loadAllBookings();
         }
+
+        // Firebase Cloud Messaging Logic
+        async function requestNotificationPermission() {
+            if (!messaging) {
+                console.warn('Messaging not supported.');
+                return;
+            }
+            try {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    console.log('Notification permission granted.');
+                    document.getElementById('enable-notifications-btn').classList.add('hidden');
+
+                    // Get token
+                    const currentToken = await messaging.getToken({ vapidKey: 'BCmEJRWqwXeBxin9-HiES_8X1Z7obo5VbEiLMHy0B8-aVx6KzVw9hmNjmPYZxCSZRQHQgJ6KWVYeFOADpNo9Fqk' });
+
+                    if (currentToken) {
+                        saveTokenToSupabase(currentToken);
+                    } else {
+                        console.log('No registration token available. Request permission to generate one.');
+                    }
+                } else {
+                    console.log('Unable to get permission to notify.');
+                }
+            } catch (error) {
+                console.error('An error occurred while retrieving token. ', error);
+            }
+        }
+
+        async function saveTokenToSupabase(token) {
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (!session) return;
+
+            try {
+                const { error } = await _supabase
+                    .from('admin_fcm_tokens')
+                    .upsert({
+                        admin_email: session.user.email,
+                        token: token,
+                        updated_at: new Date().toISOString()
+                    }, { onConflict: 'token' });
+
+                if (error) throw error;
+                console.log('FCM Token secured in database.');
+            } catch (err) {
+                console.error('Failed to save FCM token:', err);
+            }
+        }
+
+        // Handle foreground messages
+        if (messaging) {
+            messaging.onMessage((payload) => {
+                console.log('Message received. ', payload);
+
+                // Toasts or manual reload trigger
+                // For now, just reload the bookings to show the new one instantly
+                loadAllBookings();
+
+                // Native browser notification (only if the browser allows foreground notifications directly like this)
+                new Notification(payload.notification.title, {
+                    body: payload.notification.body,
+                    icon: './logo.webp'
+                });
+            });
+        }
+
+        // Add to Home Screen (PWA) Logic
+        let deferredPrompt;
+        const installBtn = document.getElementById('install-app-btn');
+
+        // Explicitly register service worker to ensure PWA criteria is met on load
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./firebase-messaging-sw.js')
+                    .then((registration) => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    }).catch((error) => {
+                        console.log('ServiceWorker registration failed: ', error);
+                    });
+            });
+        }
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent the mini-infobar from appearing on mobile
+            e.preventDefault();
+            // Stash the event so it can be triggered later.
+            deferredPrompt = e;
+            // Update UI notify the user they can install the PWA
+            installBtn.classList.remove('hidden');
+        });
+
+        async function installApp() {
+            if (!deferredPrompt) return;
+            // Show the install prompt
+            deferredPrompt.prompt();
+            // Wait for the user to respond to the prompt
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`User response to the install prompt: ${outcome}`);
+            // We've used the prompt, and can't use it again, throw it away
+            deferredPrompt = null;
+            // Hide the button
+            installBtn.classList.add('hidden');
+        }
+
+        window.addEventListener('appinstalled', () => {
+            // Hide the app-provided install promotion
+            installBtn.classList.add('hidden');
+            // Clear the deferredPrompt so it can be garbage collected
+            deferredPrompt = null;
+            console.log('PWA was installed');
+        });
 
         // Login Logic
         loginForm.addEventListener('submit', async (e) => {
@@ -655,6 +839,59 @@
                 console.error('Update Error:', err);
                 alert('Failed to update booking status: ' + err.message);
             }
+        }
+
+        // Export logic
+        function exportToExcel() {
+            const filtered = currentFilter === 'All'
+                ? allBookings
+                : allBookings.filter(b => b.status === currentFilter);
+
+            if (filtered.length === 0) {
+                alert('No bookings to export.');
+                return;
+            }
+
+            const exportData = filtered.map(booking => {
+                const businessName = booking.businesses?.name || booking.business_name || 'Unknown Business';
+                const userName = booking.profiles?.full_name || booking.profiles?.email || 'Unknown User';
+                const contactEmail = booking.businesses?.email || booking.profiles?.email || 'No Email';
+                const contactPhone = booking.businesses?.phone || 'No Phone';
+                const clientName = booking.businesses?.client_name || 'N/A';
+                const isReferral = booking.businesses?.type === 'referrer' ? 'Yes' : 'No';
+
+                let servicesList = '';
+                if (Array.isArray(booking.services)) {
+                    servicesList = booking.services.join(', ');
+                } else {
+                    servicesList = booking.service || 'General';
+                }
+
+                return {
+                    'Booking ID': booking.id,
+                    'Date Applied': new Date(booking.created_at).toLocaleString(),
+                    'Status': booking.status,
+                    'Business Name': businessName,
+                    'Client Name': clientName !== 'N/A' ? clientName : userName,
+                    'Contact Phone': contactPhone,
+                    'Contact Email': contactEmail,
+                    'Is Referral': isReferral,
+                    'Services': servicesList,
+                    'Notes': booking.notes || '',
+                    'Expected Completion': booking.expected_completion_date ? new Date(booking.expected_completion_date).toLocaleDateString() : ''
+                };
+            });
+
+            // Create worksheet and workbook
+            const worksheet = XLSX.utils.json_to_sheet(exportData);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Bookings");
+
+            // Generate filename
+            const filename = `Bookings_${currentFilter}_${new Date().toISOString().split('T')[0]}.xlsx`;
+
+            // Download file
+            XLSX.writeFile(workbook, filename);
         }
 
         // Run

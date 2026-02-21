@@ -651,7 +651,7 @@
                         <div class="flex-1 w-full">
                             <div class="flex flex-wrap items-center gap-2 mb-2">
                                 <span class="inline-block px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide rounded-full ${statusColor}">
-                                    ${booking.status}
+                                    ${booking.status === 'Accepted' ? 'In Progress' : booking.status}
                                 </span>
                                 <span class="text-xs text-slate-400 font-medium px-2 py-0.5 bg-slate-100 rounded-full border border-slate-200">
                                     ${businessName}

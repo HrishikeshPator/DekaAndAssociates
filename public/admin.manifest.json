@@ -1,0 +1,15 @@
+{
+    "short_name": "Deka Admin",
+    "name": "Deka and Associates Admin Panel",
+    "icons": [
+        {
+            "src": "logo.webp",
+            "sizes": "192x192 512x512",
+            "type": "image/webp"
+        }
+    ],
+    "start_url": "/admin.html",
+    "display": "standalone",
+    "theme_color": "#1e40af",
+    "background_color": "#f8fafc"
+}

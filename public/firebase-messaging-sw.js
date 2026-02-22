@@ -13,12 +13,5 @@ const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
   console.log('[firebase-messaging-sw.js] Received background message ', payload);
-  // Customize notification here
-  const notificationTitle = payload.notification.title || 'New Notification';
-  const notificationOptions = {
-    body: payload.notification.body,
-    icon: '/logo.webp',
-  };
-
-  self.registration.showNotification(notificationTitle, notificationOptions);
+  // Firebase SDK natively handles the 'notification' block for display.
 });

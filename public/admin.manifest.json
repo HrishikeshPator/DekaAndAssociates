@@ -6,6 +6,12 @@
             "src": "logo.webp",
             "sizes": "192x192 512x512",
             "type": "image/webp"
+        },
+        {
+            "src": "badge.svg",
+            "sizes": "96x96",
+            "type": "image/svg+xml",
+            "purpose": "monochrome badge"
         }
     ],
     "start_url": "/admin.html",

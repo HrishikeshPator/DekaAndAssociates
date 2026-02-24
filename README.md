@@ -24,12 +24,5 @@ We offer precise and reliable solutions tailored to modern enterprises:
 - **NGOs & Societies**: Dedicated project and regulatory support.
 - **Companies & LLPs**: End-to-end accounting, auditing, and ROC filings.
 
-## 📞 Contact Us
-
-- **Phone/WhatsApp**: [+91-9365828122](https://wa.me/919365828122)
-- **Instagram**: [@dekaandassociates_tax](https://www.instagram.com/dekaandassociates_tax?igsh=Y2dhaGgxaDAxdmcy)
-- **Facebook**: [Deka & Associates](https://www.facebook.com/share/18d8CgH23C)
-
----
 
 *This project contains the source code for the Deka & Associates official website.*

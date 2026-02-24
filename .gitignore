@@ -74,3 +74,5 @@ sql/
 
 # Firebase Configuration
 public/js/firebase-config.js
+supabase.exe
+supabase.tar.gz

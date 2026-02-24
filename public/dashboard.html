@@ -411,12 +411,45 @@
         // Initialize
         async function initDashboard() {
             try {
-                // Fetch Settings first
+                // FETCH SETTINGS
                 fetchReferralCommission();
 
-                // Check Session
-                const { data: { session }, error } = await _supabase.auth.getSession();
+                // DEBUG OAUTH HASH
+                if (window.location.hash) {
+                    console.log("Full OAuth Hash:", window.location.hash);
+                    if (window.location.hash.includes('error=')) {
+                        alert("Google Login Error found in URL: " + decodeURIComponent(window.location.hash));
+                    }
+                }
+
+                // Check Session with retry for OAuth redirects
+                if (window.location.hash && window.location.hash.includes('access_token')) {
+                    // Wait briefly for Supabase to process the URL hash
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                }
+
+                let { data: { session }, error } = await _supabase.auth.getSession();
+
+                // If still no session but we just loaded, try waiting for onAuthStateChange
+                if (!session) {
+                    await new Promise(resolve => {
+                        const { data: { subscription } } = _supabase.auth.onAuthStateChange((event, newSession) => {
+                            if (newSession) {
+                                session = newSession;
+                                subscription.unsubscribe();
+                                resolve();
+                            }
+                        });
+                        // Timeout after 1.5 seconds if still no session
+                        setTimeout(() => {
+                            subscription.unsubscribe();
+                            resolve();
+                        }, 1500);
+                    });
+                }
+
                 if (error || !session) {
+                    console.error('No valid session found:', error);
                     window.location.href = '/index.html';
                     return;
                 }

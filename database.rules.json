@@ -1,0 +1,34 @@
+{
+  "rules": {
+    "admins": {
+      ".read": "auth != null",
+      ".write": false
+    },
+    "settings": {
+      ".read": "auth != null",
+      ".write": false
+    },
+    "profiles": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "businesses": {
+      ".read": "auth != null",
+      "$business_id": {
+        ".write": "auth != null && (!data.exists() || data.child('user_id').val() === auth.uid)"
+      }
+    },
+    "bookings": {
+      ".read": "auth != null",
+      "$booking_id": {
+        ".write": "auth != null"
+      }
+    },
+    "admin_fcm_tokens": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    }
+  }
+}

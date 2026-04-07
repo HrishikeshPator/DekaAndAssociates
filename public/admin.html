@@ -11,11 +11,10 @@
     <link
         href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
         rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <script id="tailwind-config">
@@ -261,11 +260,15 @@
         </div>
     </div>
 
-    <script src="js/config.js"></script>
     <script src="js/firebase-config.js"></script>
     <script>
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+        // Initialize Firebase is handled in firebase-config.js, or we can just guarantee it's initialized
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+
+        const db = firebase.database();
+        const auth = firebase.auth();
 
         let messaging;
         try {
@@ -278,25 +281,7 @@
             console.warn('Failed to initialize Firebase Messaging:', e);
         }
     </script>
-    <!-- REMOVED shared js/supabase.js to avoid session conflict -->
     <script>
-        // Initialize Unique Supabase Client for Admin (Isolated Session)
-        if (!window.SUPABASE_CONFIG) {
-            console.error('Supabase Config not found. Please create public/js/config.js');
-        }
-        const supabaseUrl = window.SUPABASE_CONFIG.url;
-        const supabaseKey = window.SUPABASE_CONFIG.key;
-
-        // Use a different storage key so Admin login doesn't overwrite User login
-        const _supabase = supabase.createClient(supabaseUrl, supabaseKey, {
-            auth: {
-                storageKey: 'supabase.auth.token-admin', // Unique key for Admin
-                persistSession: true,
-                autoRefreshToken: true,
-                detectSessionInUrl: true
-            }
-        });
-
         // DOM Elements
         const loginSection = document.getElementById('login-section');
         const adminDashboard = document.getElementById('admin-dashboard');
@@ -310,9 +295,9 @@
         const settingsForm = document.getElementById('settings-form');
 
         let allBookings = [];
+        let businessesMap = {};
+        let profilesMap = {};
         let currentFilter = 'All';
-
-        // ... existing code ...
 
         // Settings Logic
         function closeSettings() {
@@ -321,16 +306,11 @@
 
         async function openSettings() {
             settingsModal.classList.remove('hidden');
-            // Fetch current value
             try {
-                const { data, error } = await _supabase
-                    .from('settings')
-                    .select('value')
-                    .eq('key', 'referral_commission')
-                    .single();
-
-                if (data) {
-                    document.getElementById('setting-commission').value = data.value;
+                const snapshot = await db.ref('settings/referral_commission').once('value');
+                const val = snapshot.val();
+                if (val) {
+                    document.getElementById('setting-commission').value = val;
                 }
             } catch (err) {
                 console.error('Error fetching settings:', err);
@@ -342,16 +322,7 @@
             const newValue = document.getElementById('setting-commission').value;
 
             try {
-                const { error } = await _supabase
-                    .from('settings')
-                    .upsert({
-                        key: 'referral_commission',
-                        value: newValue,
-                        updated_at: new Date().toISOString()
-                    }, { onConflict: 'key' });
-
-                if (error) throw error;
-
+                await db.ref('settings/referral_commission').set(parseFloat(newValue));
                 alert('Settings updated successfully!');
                 closeSettings();
             } catch (err) {
@@ -359,33 +330,36 @@
             }
         });
 
-        // Business Modal Logic
-
         // Initialize
-        async function initAdmin() {
-            const { data: { session }, error } = await _supabase.auth.getSession();
+        function initAdmin() {
+            auth.onAuthStateChanged(async (user) => {
+                if (user) {
+                    try {
+                        const allAdmins = await db.ref('admins').once('value');
+                        let isAdmin = false;
 
-            if (session) {
-                // Secure Admin Check via Database (RLS Policy)
-                try {
-                    const { data, error } = await _supabase
-                        .from('admins')
-                        .select('email')
-                        .eq('email', session.user.email)
-                        .single();
+                        allAdmins.forEach(child => {
+                            const adminData = child.val();
+                            // Support either { email: "x" } or string value "x"
+                            const adminEmail = (typeof adminData === 'string' ? adminData : adminData.email) || '';
+                            if (adminEmail.trim().toLowerCase() === user.email.trim().toLowerCase()) {
+                                isAdmin = true;
+                            }
+                        });
 
-                    if (data && !error) {
-                        showDashboard(session.user);
-                    } else {
-                        showUnauthorized(session.user);
+                        if (isAdmin) {
+                            showDashboard(user);
+                        } else {
+                            showUnauthorized(user);
+                        }
+                    } catch (err) {
+                        console.error('Admin verification failed:', err);
+                        showUnauthorized(user);
                     }
-                } catch (err) {
-                    console.error('Admin verification failed:', err);
-                    showUnauthorized(session.user);
+                } else {
+                    showLogin();
                 }
-            } else {
-                showLogin();
-            }
+            });
         }
 
         function showLogin() {
@@ -398,7 +372,6 @@
             loginSection.classList.add('hidden');
             adminDashboard.classList.add('hidden');
 
-            // Create Unauthorized Screen
             const unauthorizedScreen = document.createElement('div');
             unauthorizedScreen.id = 'unauthorized-screen';
             unauthorizedScreen.className = 'flex items-center justify-center min-h-screen p-6 bg-slate-100';
@@ -424,22 +397,16 @@
             document.getElementById('unauthorized-screen')?.remove();
             document.getElementById('admin-email').textContent = user.email;
 
-            // Notification logic (Temporarily disabled until backend keys are configured)
-
             if ('Notification' in window) {
                 if (Notification.permission === 'default') {
                     document.getElementById('enable-notifications-btn').classList.remove('hidden');
                 } else if (Notification.permission === 'granted') {
-                    // Make sure token is synced on login
                     requestNotificationPermission();
                 }
             }
-
-
             loadAllBookings();
         }
 
-        // Firebase Cloud Messaging Logic
         async function requestNotificationPermission() {
             if (!messaging) {
                 console.warn('Messaging not supported.');
@@ -451,7 +418,6 @@
                     console.log('Notification permission granted.');
                     document.getElementById('enable-notifications-btn').classList.add('hidden');
 
-                    // Get service worker registration and pass it to getToken
                     const registration = await navigator.serviceWorker.ready;
                     const currentToken = await messaging.getToken({
                         vapidKey: 'BCmEJRWqwXeBxin9-HiES_8X1Z7obo5VbEiLMHy0B8-aVx6KzVw9hmNjmPYZxCSZRQHQgJ6KWVYeFOADpNo9Fqk',
@@ -459,7 +425,7 @@
                     });
 
                     if (currentToken) {
-                        saveTokenToSupabase(currentToken);
+                        saveTokenToFirebase(currentToken);
                     } else {
                         console.log('No registration token available. Request permission to generate one.');
                     }
@@ -471,36 +437,30 @@
             }
         }
 
-        async function saveTokenToSupabase(token) {
-            const { data: { session } } = await _supabase.auth.getSession();
-            if (!session) return;
+        async function saveTokenToFirebase(token) {
+            const user = auth.currentUser;
+            if (!user) return;
 
             try {
-                const { error } = await _supabase
-                    .from('admin_fcm_tokens')
-                    .upsert({
-                        admin_email: session.user.email,
+                const tokenRef = db.ref('admin_fcm_tokens').orderByChild('token').equalTo(token);
+                const snapshot = await tokenRef.once('value');
+                if (!snapshot.exists()) {
+                    await db.ref('admin_fcm_tokens').push({
+                        admin_email: user.email,
                         token: token,
                         updated_at: new Date().toISOString()
-                    }, { onConflict: 'token' });
-
-                if (error) throw error;
+                    });
+                }
                 console.log('FCM Token secured in database.');
             } catch (err) {
                 console.error('Failed to save FCM token:', err);
             }
         }
 
-        // Handle foreground messages
         if (messaging) {
             messaging.onMessage((payload) => {
                 console.log('Message received. ', payload);
-
-                // Toasts or manual reload trigger
-                // For now, just reload the bookings to show the new one instantly
                 loadAllBookings();
-
-                // Native browser notification (Using Service Worker for compatibility)
                 if (Notification.permission === 'granted') {
                     navigator.serviceWorker.ready.then((registration) => {
                         registration.showNotification(payload.notification.title, {
@@ -512,11 +472,9 @@
             });
         }
 
-        // Add to Home Screen (PWA) Logic
         let deferredPrompt;
         const installBtn = document.getElementById('install-app-btn');
 
-        // Explicitly register service worker to ensure PWA criteria is met on load
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./firebase-messaging-sw.js')
@@ -529,36 +487,26 @@
         }
 
         window.addEventListener('beforeinstallprompt', (e) => {
-            // Prevent the mini-infobar from appearing on mobile
             e.preventDefault();
-            // Stash the event so it can be triggered later.
             deferredPrompt = e;
-            // Update UI notify the user they can install the PWA
             installBtn.classList.remove('hidden');
         });
 
         async function installApp() {
             if (!deferredPrompt) return;
-            // Show the install prompt
             deferredPrompt.prompt();
-            // Wait for the user to respond to the prompt
             const { outcome } = await deferredPrompt.userChoice;
             console.log(`User response to the install prompt: ${outcome}`);
-            // We've used the prompt, and can't use it again, throw it away
             deferredPrompt = null;
-            // Hide the button
             installBtn.classList.add('hidden');
         }
 
         window.addEventListener('appinstalled', () => {
-            // Hide the app-provided install promotion
             installBtn.classList.add('hidden');
-            // Clear the deferredPrompt so it can be garbage collected
             deferredPrompt = null;
             console.log('PWA was installed');
         });
 
-        // Login Logic
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const formData = new FormData(e.target);
@@ -571,19 +519,12 @@
             loginError.classList.add('hidden');
 
             try {
-                const { data, error } = await _supabase.auth.signInWithPassword({
-                    email: email,
-                    password: password
-                });
-
-                if (error) throw error;
-
-                showDashboard(data.user);
-
+                await auth.signInWithEmailAndPassword(email, password);
             } catch (err) {
                 console.error('Login Error:', err);
                 loginError.textContent = err.message || 'Invalid email or password.';
                 loginError.classList.remove('hidden');
+                auth.signOut();
             } finally {
                 btn.disabled = false;
                 btn.innerText = 'Sign In';
@@ -591,7 +532,7 @@
         });
 
         async function adminSignOut() {
-            await _supabase.auth.signOut();
+            await auth.signOut();
             window.location.reload();
         }
 
@@ -600,20 +541,31 @@
             bookingsContainer.innerHTML = '<div class="text-center py-12"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div><p class="mt-4 text-slate-500">Loading bookings...</p></div>';
 
             try {
-                // Fetch bookings with business details and profiles
-                const { data, error } = await _supabase
-                    .from('bookings')
-                    .select(`
-                        *,
-                        businesses (name, phone, type, email, client_name, details),
-                        profiles:user_id (email, full_name, role)
-                    `)
-                    .order('created_at', { ascending: false });
+                // Fetch profiles, businesses, and bookings individually
+                const [profilesSnap, businessesSnap, bookingsSnap] = await Promise.all([
+                    db.ref('profiles').once('value'),
+                    db.ref('businesses').once('value'),
+                    db.ref('bookings').once('value')
+                ]);
 
-                if (error) throw error;
-                allBookings = data;
+                profilesMap = profilesSnap.val() || {};
+                businessesMap = businessesSnap.val() || {};
+                
+                const bookingsData = [];
+                bookingsSnap.forEach(child => {
+                    const booking = child.val();
+                    booking.id = child.key;
+                    
+                    booking.businesses = businessesMap[booking.business_id] || null;
+                    booking.profiles = profilesMap[booking.user_id] || null;
+
+                    bookingsData.push(booking);
+                });
+
+                bookingsData.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                allBookings = bookingsData;
+                
                 renderBookings();
-
             } catch (err) {
                 console.error('Fetch Error:', err);
                 bookingsContainer.innerHTML = `
@@ -623,8 +575,6 @@
                         <p class="font-mono text-sm mt-2 bg-white p-2 rounded border border-red-200 inline-block text-left">
                             ${err.message || 'Unknown error'}
                         </p>
-                        ${err.details ? `<p class="text-xs text-slate-500 mt-2">${err.details}</p>` : ''}
-                        ${err.hint ? `<p class="text-xs text-slate-500 mt-1 italic">Hint: ${err.hint}</p>` : ''}
                     </div>
                 `;
             }
@@ -632,8 +582,6 @@
 
         function filterBookings(status) {
             currentFilter = status;
-
-            // Update UI tabs
             document.querySelectorAll('#admin-dashboard nav button, #admin-dashboard .flex button').forEach(b => {
                 if (b.id.startsWith('filter-')) {
                     b.classList.remove('bg-slate-100', 'text-slate-900');
@@ -644,7 +592,6 @@
                     }
                 }
             });
-
             renderBookings();
         }
 
@@ -666,7 +613,6 @@
             bookingsContainer.innerHTML = filtered.map((booking, index) => {
                 const businessName = booking.businesses?.name || booking.business_name || 'Unknown Business';
                 const userName = booking.profiles?.full_name || booking.profiles?.email || 'Unknown User';
-                // Prioritize Business Email, fallback to Profile Email
                 const contactEmail = booking.businesses?.email || booking.profiles?.email || 'No Email';
                 const contactPhone = booking.businesses?.phone || 'No Phone';
                 const clientName = booking.businesses?.client_name || 'N/A';
@@ -674,7 +620,6 @@
 
                 const createdDate = new Date(booking.created_at).toLocaleDateString() + ' ' + new Date(booking.created_at).toLocaleTimeString();
 
-                // Format Services
                 let servicesList = '';
                 if (Array.isArray(booking.services)) {
                     servicesList = booking.services.map(s => `<span class="inline-block bg-slate-100 text-slate-700 px-2 py-1 rounded text-xs font-medium mr-1 mb-1">${s}</span>`).join('');
@@ -682,14 +627,12 @@
                     servicesList = `<span class="inline-block bg-slate-100 text-slate-700 px-2 py-1 rounded text-xs font-medium">${booking.service || 'General'}</span>`;
                 }
 
-                // Status Badge Color
                 let statusColor = 'bg-slate-100 text-slate-800';
                 if (booking.status === 'Pending') statusColor = 'bg-yellow-100 text-yellow-800';
                 if (booking.status === 'Accepted') statusColor = 'bg-blue-100 text-blue-800';
                 if (booking.status === 'Completed') statusColor = 'bg-green-100 text-green-800';
                 if (booking.status === 'Rejected') statusColor = 'bg-red-100 text-red-800';
 
-                // Action Buttons Logic
                 let actions = '';
                 if (booking.status === 'Pending') {
                     actions = `
@@ -702,7 +645,6 @@
                     `;
                 }
 
-                // Notes Logic (Truncate)
                 let notesHtml = '';
                 if (booking.notes) {
                     const isLong = booking.notes.length > 60;
@@ -727,8 +669,6 @@
 
                 return `
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col md:flex-row gap-6 hover:shadow-md transition-shadow">
-                    
-                    <!-- Details -->
                     <div class="flex-1 space-y-3">
                         <div class="flex items-center gap-2 mb-1">
                             <span class="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wide ${statusColor}">${booking.status}</span>
@@ -762,17 +702,14 @@
                         </div>` : ''}
                     </div>
 
-                    <!-- Actions -->
                     <div class="flex flex-row md:flex-col justify-start md:justify-center items-start md:items-end gap-3 min-w-[140px] border-t md:border-t-0 md:border-l border-slate-100 pt-4 md:pt-0 md:pl-6">
                         ${actions}
                     </div>
-
                 </div>
                 `;
             }).join('');
         }
 
-        // Action Handlers
         function openAcceptModal(bookingId) {
             document.getElementById('accept-booking-id').value = bookingId;
             acceptModal.classList.remove('hidden');
@@ -817,31 +754,19 @@
         });
 
         async function updateStatus(bookingId, status, completionDate = null) {
-            // Optimistic UI updates could be added here, but reloading is safer for admin ops
-
-            // Build update object
             const updates = { status: status };
             if (completionDate) updates.expected_completion_date = completionDate;
-            if (status === 'Completed') updates.expected_completion_date = new Date().toISOString(); // Or keep original expectation? Let's just update status for now.
+            if (status === 'Completed') updates.expected_completion_date = new Date().toISOString(); 
 
             try {
-                const { error } = await _supabase
-                    .from('bookings')
-                    .update(updates)
-                    .eq('id', bookingId);
-
-                if (error) throw error;
-
-                // Reload data
+                await db.ref('bookings/' + bookingId).update(updates);
                 await loadAllBookings();
-
             } catch (err) {
                 console.error('Update Error:', err);
                 alert('Failed to update booking status: ' + err.message);
             }
         }
 
-        // Export logic
         function exportToExcel() {
             const filtered = currentFilter === 'All'
                 ? allBookings
@@ -882,19 +807,13 @@
                 };
             });
 
-            // Create worksheet and workbook
             const worksheet = XLSX.utils.json_to_sheet(exportData);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "Bookings");
-
-            // Generate filename
             const filename = `Bookings_${currentFilter}_${new Date().toISOString().split('T')[0]}.xlsx`;
-
-            // Download file
             XLSX.writeFile(workbook, filename);
         }
 
-        // Run
         window.addEventListener('load', initAdmin);
     </script>
 </body>

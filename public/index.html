@@ -58,7 +58,9 @@
     <link
         href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
         rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet" />
@@ -1129,12 +1131,12 @@
         </div>
     </footer>
 
-    <script src="js/config.js"></script>
-    <script src="js/supabase.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/firebase-client.js"></script>
     <script>
-        async function handleReferClient() {
-            const { data: { session } } = await _supabase.auth.getSession();
-            if (session) {
+        function handleReferClient() {
+            const user = firebase.auth().currentUser;
+            if (user) {
                 window.location.href = 'dashboard.html?mode=refer';
             } else {
                 // If auth.js is loaded, use openAuthModal. 
@@ -1144,7 +1146,7 @@
                     openAuthModal();
                 } else {
                     // Fallback if modal function isn't global yet (handled inside auth.js usually)
-                    document.getElementById('auth-modal').classList.remove('hidden');
+                    document.getElementById('auth-modal')?.classList.remove('hidden');
                 }
             }
         }

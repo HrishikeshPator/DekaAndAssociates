@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard.html
+Disallow: /admin.html
+Disallow: /admin.manifest.json
+Disallow: /js/firebase-config.js
+
+Sitemap: https://www.dekaandassociates.in/sitemap.xml
